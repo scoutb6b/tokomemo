@@ -1,7 +1,7 @@
 "use client";
 
-import { supabase } from "@/_libs/supabase";
 import { useState } from "react";
+import { createUser } from "./action";
 
 const SignUpPage = () => {
   const [mail, setMail] = useState("");
@@ -9,19 +9,13 @@ const SignUpPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signUp({
-      email: mail,
-      password,
-      options: {
-        emailRedirectTo: `http://localhost:3000/login`,
-      },
-    });
-    if (error) {
-      alert("登録失敗");
-    } else {
+    try {
+      await createUser(mail, password);
       setMail("");
       setPassword("");
       alert("認証メールを送信しました");
+    } catch (error) {
+      console.error(error);
     }
   };
 
