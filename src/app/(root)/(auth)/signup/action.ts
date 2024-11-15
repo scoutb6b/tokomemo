@@ -12,7 +12,7 @@ export const createUser = async (mail: string, password: string) => {
     },
   });
   if (error) {
-    throw new Error("登録失敗");
+    throw new Error("サインアップ失敗");
   }
 
   const supabaseUserid = data.user?.id;
@@ -26,7 +26,7 @@ export const createUser = async (mail: string, password: string) => {
         },
       });
     } catch (error) {
-      console.error("ユーザー登録エラー:", error);
+      console.error("テーブル登録エラー:", error);
       throw new Error("Userテーブルへの登録に失敗しました");
     }
   }
