@@ -1,58 +1,73 @@
 "use client";
 
-import { supabase } from "@/_libs/supabase";
-import { useState } from "react";
+import { authSchema } from "@/_libs/zod/schema";
+import { createUser } from "./action";
+import { Button, Group, PasswordInput, TextInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { zodResolver } from "mantine-form-zod-resolver";
+import c from "./page.module.css";
 
 const SignUpPage = () => {
-  const [mail, setMail] = useState("");
-  const [password, setPassword] = useState("");
+  const form = useForm({
+    initialValues: {
+      mail: "",
+      password: "",
+    },
+    validate: zodResolver(authSchema),
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signUp({
-      email: mail,
-      password,
-      options: {
-        emailRedirectTo: `http://localhost:3000/login`,
-      },
-    });
-    if (error) {
-      alert("登録失敗");
-    } else {
-      setMail("");
-      setPassword("");
+    if (form.validate().hasErrors) {
+      console.error("バリデーションエラー");
+      return;
+    }
+    const { mail, password } = form.getValues();
+    try {
+      await createUser(mail, password);
       alert("認証メールを送信しました");
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
-    <div>
+    <div className={c.form}>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="email">メールアドレス</label>
-          <input
+          <TextInput
+            label="メールアドレス"
             type="email"
             name="email"
             id="email"
             required
-            onChange={(e) => setMail(e.target.value)}
-            value={mail}
+            {...form.getInputProps("mail")}
+            error={form.errors.mail}
           />
         </div>
         <div>
-          <label htmlFor="password">パスワード</label>
-          <input
+          <PasswordInput
+            label="パスワード"
             type="password"
             name="password"
             id="password"
             required
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            {...form.getInputProps("password")}
+            error={form.errors.password}
           />
         </div>
-        <div>
-          <button type="submit">登録</button>
-        </div>
+        <Group justify="center" mt="md">
+          <Button
+            type="submit"
+            variant="outline"
+            color="orange"
+            px="xl"
+            size="md"
+            radius="md"
+          >
+            登録
+          </Button>
+        </Group>
       </form>
     </div>
   );

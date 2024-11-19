@@ -1,24 +1,26 @@
-import type { Metadata } from "next";
 import "@mantine/core/styles.css";
-import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import "../globals.css";
+import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "トコメモ",
+  title: "tokomemo",
   description: "自分だけの複数店舗での価格を比較するアプリ",
 };
+const theme = createTheme({
+  fontFamily: "Open Sans, sans-serif",
+  primaryColor: "cyan",
+});
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ja">
       <head>
-        <ColorSchemeScript defaultColorScheme="auto" />
+        <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider defaultColorScheme="auto">{children}</MantineProvider>
+        <MantineProvider theme={theme}>{children}</MantineProvider>
       </body>
     </html>
   );

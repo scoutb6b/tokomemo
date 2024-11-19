@@ -1,6 +1,7 @@
 "use client";
 
 import { supabase } from "@/_libs/supabase";
+import { Button, Group, PasswordInput, TextInput } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -17,7 +18,7 @@ const LoginPage = () => {
     if (error) {
       alert("ログイン失敗");
     } else {
-      router.replace("http://localhost:3000/");
+      router.replace(`${process.env.API_URL}/product`);
     }
   };
 
@@ -25,8 +26,8 @@ const LoginPage = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="email">メールアドレス</label>
-          <input
+          <TextInput
+            label="メールアドレス"
             type="email"
             name="email"
             id="email"
@@ -36,8 +37,8 @@ const LoginPage = () => {
           />
         </div>
         <div>
-          <label htmlFor="password">パスワード</label>
-          <input
+          <PasswordInput
+            label="パスワード"
             type="password"
             name="password"
             id="password"
@@ -46,9 +47,18 @@ const LoginPage = () => {
             value={password}
           />
         </div>
-        <div>
-          <button type="submit">ログイン</button>
-        </div>
+        <Group justify="center" mt="md">
+          <Button
+            type="submit"
+            variant="outline"
+            color="orange"
+            px="xl"
+            size="md"
+            radius="md"
+          >
+            ログイン
+          </Button>
+        </Group>
       </form>
     </div>
   );
