@@ -10,7 +10,7 @@ datasource db {
 
 model User {
   id String @id @default(uuid()) @db.Uuid
-  supabaseUserid String 
+  supabaseUserid String @unique
   store Store[]
   product Product[]
   category Category[]
