@@ -81,7 +81,7 @@ export const GET = async (req: NextRequest) => {
     });
     console.log(data);
 
-    return NextResponse.json({ data }, { status: 200 });
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 402 });
