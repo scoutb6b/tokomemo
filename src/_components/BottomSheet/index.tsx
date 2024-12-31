@@ -55,8 +55,8 @@ export const BottomSheet = ({ title, basePath }: titleProps) => {
           <form onSubmit={clickCreate} className={c.form}>
             <div className={c.handle}></div>
             <Title className={c.title}>{title}を追加する</Title>
-            <Description></Description>{" "}
-            //↑aria-describedbyが指定されていないための警告のため
+            <Description></Description>
+            {/* ↑aria-describedbyが指定されていないための警告のため */}
             <TextInput
               size="md"
               radius="md"
