@@ -38,7 +38,8 @@ export const BottomSheet = ({ title, basePath }: titleProps) => {
     }
   };
   console.log(title);
-  const { Root, Trigger, Overlay, Portal, Content, Title } = Drawer;
+  const { Root, Trigger, Description, Overlay, Portal, Content, Title } =
+    Drawer;
 
   return (
     <Root>
@@ -54,7 +55,8 @@ export const BottomSheet = ({ title, basePath }: titleProps) => {
           <form onSubmit={clickCreate} className={c.form}>
             <div className={c.handle}></div>
             <Title className={c.title}>{title}を追加する</Title>
-
+            <Description></Description>{" "}
+            //↑aria-describedbyが指定されていないための警告のため
             <TextInput
               size="md"
               radius="md"
@@ -62,7 +64,6 @@ export const BottomSheet = ({ title, basePath }: titleProps) => {
               value={name}
               onChange={(e) => setName(e.currentTarget.value)}
             />
-
             <Button
               type="submit"
               variant="filled"
