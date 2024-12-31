@@ -1,0 +1,8 @@
+.saveBtn {
+  display: block;
+  margin: 40px auto;
+  background: var(--mantine-color-blue-5);
+  &:hover {
+    background: var(--mantine-color-blue-6);
+  }
+}
