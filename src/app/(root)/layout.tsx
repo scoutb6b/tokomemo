@@ -3,6 +3,9 @@ import "../globals.css";
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Notifications } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
+import { ModalsProvider } from "@mantine/modals";
 
 export const metadata: Metadata = {
   title: "tokomemo",
@@ -21,7 +24,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <main>
-          <MantineProvider theme={theme}>{children}</MantineProvider>
+          <MantineProvider theme={theme}>
+            <ModalsProvider>
+              <Notifications />
+              {children}
+            </ModalsProvider>
+          </MantineProvider>
         </main>
       </body>
     </html>
