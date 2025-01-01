@@ -16,8 +16,6 @@ export const GET = async (
   const supabaseUserid = data.user?.id;
 
   const { id } = params;
-  console.log("id", id);
-  console.log("supa", supabaseUserid);
 
   try {
     const store = await prisma.store.findUnique({
@@ -31,9 +29,8 @@ export const GET = async (
       //   name: true,
       // },
     });
-    console.log(store);
 
-    return NextResponse.json({ store, message: "取得おk" }, { status: 200 });
+    return NextResponse.json(store);
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ message: error.message }, { status: 401 });
@@ -52,7 +49,6 @@ export const PUT = async (
   const supabaseUserid = data.user?.id;
 
   const { id } = params;
-  console.log(id);
 
   try {
     const body = await req.json();
@@ -70,10 +66,7 @@ export const PUT = async (
         name: store,
       },
     });
-    return NextResponse.json(
-      { message: "store更新完了", store: storeName },
-      { status: 200 }
-    );
+    return NextResponse.json({ store: storeName });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ message: error.message }, { status: 401 });
@@ -100,7 +93,7 @@ export const DELETE = async (
         },
       },
     });
-    return NextResponse.json({ message: "store削除完了" }, { status: 200 });
+    return NextResponse.json({ message: "store削除完了" });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ message: error.message }, { status: 400 });

@@ -1,5 +1,6 @@
 import prisma from "@/_libs/prisma";
 import { supabase } from "@/_libs/supabase";
+import { Store } from "@/_types/apiResponse";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
@@ -81,7 +82,7 @@ export const GET = async (req: NextRequest) => {
     });
     console.log(data);
 
-    return NextResponse.json({ data }, { status: 200 });
+    return NextResponse.json<Store[]>(data, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 402 });
