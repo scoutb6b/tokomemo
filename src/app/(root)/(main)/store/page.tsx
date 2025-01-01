@@ -1,9 +1,9 @@
 "use client";
 
-import { BottomSheet } from "@/_components/BottomSheet";
-import { List } from "@/_components/LIst";
-import { useFetch } from "@/_hooks/useFetch";
-import { Store } from "@/_types/apiResponse";
+import { BottomSheet } from "@/app/_components/BottomSheet";
+import { List } from "@/app/_components/LIst";
+import { useFetch } from "@/app/_hooks/useFetch";
+import { Store } from "@/app/_types/apiResponse";
 import { NextPage } from "next"; //page.tsxにつける型
 
 const pageData = {
