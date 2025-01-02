@@ -5,18 +5,20 @@ import { IconPlus } from "@tabler/icons-react";
 import { Drawer } from "vaul";
 import c from "./index.module.css";
 import { FormEventHandler, useState } from "react";
-import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { useRouter } from "next/navigation";
 
 type titleProps = {
   title: string;
   basePath: string;
+  mutate: () => void;
 };
 
-export const BottomSheet = ({ title, basePath }: titleProps) => {
+export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
   const router = useRouter();
   const { token } = useSupabaseSession();
   const [name, setName] = useState("");
+  const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
 
   const clickCreate: FormEventHandler<HTMLFormElement> = async (e) => {
     if (!token) return;
@@ -32,7 +34,10 @@ export const BottomSheet = ({ title, basePath }: titleProps) => {
         body: JSON.stringify({ name }),
       });
       // window.location.reload();
-      router.refresh();
+      setName("");
+      // router.refresh()
+      setIsOpen(false);
+      mutate();
     } catch (error) {
       console.log(error);
     }
@@ -42,7 +47,7 @@ export const BottomSheet = ({ title, basePath }: titleProps) => {
     Drawer;
 
   return (
-    <Root>
+    <Root open={isOpen} onOpenChange={setIsOpen}>
       <Trigger className={c.trigger}>
         <Flex gap="xs">
           <IconPlus size={28} stroke={1.5} />

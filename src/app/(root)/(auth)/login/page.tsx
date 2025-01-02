@@ -1,6 +1,6 @@
 "use client";
 
-import { supabase } from "@/_libs/supabase";
+import { supabase } from "@/app/_libs/supabase";
 import { Button, Group, PasswordInput, TextInput } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

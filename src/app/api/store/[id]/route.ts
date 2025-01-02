@@ -1,5 +1,5 @@
-import prisma from "@/_libs/prisma";
-import { supabase } from "@/_libs/supabase";
+import prisma from "@/app/_libs/prisma";
+import { supabase } from "@/app/_libs/supabase";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (

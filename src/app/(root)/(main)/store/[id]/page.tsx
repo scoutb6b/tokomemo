@@ -1,10 +1,10 @@
 "use client";
 
-import { DeleteAnchor } from "@/_components/DeleteAnchor";
-import { EditSave } from "@/_components/EditSave";
-import { useFetch } from "@/_hooks/useFetch";
-import { useSupabaseSession } from "@/_hooks/useSupabaseSession";
-import { Store } from "@/_types/apiResponse";
+import { DeleteAnchor } from "@/app/_components/DeleteAnchor";
+import { EditSave } from "@/app/_components/EditSave";
+import { useFetch } from "@/app/_hooks/useFetch";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
+import { Store } from "@/app/_types/apiResponse";
 import { TextInput } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";

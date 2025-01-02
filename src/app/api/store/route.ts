@@ -1,6 +1,6 @@
-import prisma from "@/_libs/prisma";
-import { supabase } from "@/_libs/supabase";
-import { Store } from "@/_types/apiResponse";
+import prisma from "@/app/_libs/prisma";
+import { supabase } from "@/app/_libs/supabase";
+import { Store } from "@/app/_types/apiResponse";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouteGuard } from "@/_hooks/useRouteGuard";
+import { useRouteGuard } from "@/app/_hooks/useRouteGuard";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   useRouteGuard();

@@ -1,6 +1,6 @@
 "use client";
 
-import { authSchema } from "@/_libs/zod/schema";
+import { authSchema } from "@/app/_libs/zod/schema";
 import { createUser } from "./action";
 import { Button, Group, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";

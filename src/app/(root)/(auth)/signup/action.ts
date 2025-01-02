@@ -1,7 +1,7 @@
 "use server";
 
-import prisma from "@/_libs/prisma";
-import { supabase } from "@/_libs/supabase";
+import prisma from "@/app/_libs/prisma";
+import { supabase } from "@/app/_libs/supabase";
 
 export const createUser = async (mail: string, password: string) => {
   const { data, error } = await supabase.auth.signUp({
