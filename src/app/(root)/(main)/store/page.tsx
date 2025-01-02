@@ -37,7 +37,12 @@ const StorePage: NextPage = () => {
 
   //↑をこれをカスタムhookかしてuseFetch
 
-  const { data: stores, error, isLoading } = useFetch<Store[]>("/api/store");
+  const {
+    data: stores,
+    error,
+    isLoading,
+    mutate,
+  } = useFetch<Store[]>("/api/store");
 
   if (error) {
     return <div>err!!{error.message}</div>;
@@ -60,7 +65,7 @@ const StorePage: NextPage = () => {
         })}
       </div>
 
-      <BottomSheet title={title} basePath={basePath} />
+      <BottomSheet mutate={mutate} title={title} basePath={basePath} />
     </div>
   );
 };
