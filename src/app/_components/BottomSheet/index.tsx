@@ -7,6 +7,7 @@ import c from "./index.module.css";
 import { FormEventHandler, useState } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { useRouter } from "next/navigation";
+import { notifications } from "@mantine/notifications";
 
 type titleProps = {
   title: string;
@@ -39,7 +40,13 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
       setIsOpen(false);
       mutate();
     } catch (error) {
-      console.log(error);
+      notifications.show({
+        title: "エラーが発生しました",
+        message: `${error}`,
+        autoClose: 2500,
+        position: "bottom-right",
+        color: "red",
+      });
     }
   };
   console.log(title);
