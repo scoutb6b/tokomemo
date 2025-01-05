@@ -41,6 +41,7 @@ const StoreIdPage: NextPage = () => {
         },
         body: JSON.stringify(storeName),
       });
+      router.push("/store");
       notifications.show({
         title: "保存されました",
         message: "",
@@ -48,7 +49,6 @@ const StoreIdPage: NextPage = () => {
         position: "bottom-right",
         color: "green",
       });
-      router.push("/store");
     } catch (error) {
       console.error(error);
     }
