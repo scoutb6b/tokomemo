@@ -1,6 +1,6 @@
 import prisma from "@/app/_libs/prisma";
 import { supabase } from "@/app/_libs/supabase";
-import { Store } from "@/app/_types/apiResponse";
+import { Store } from "@/app/_types/ApiResponse/Store";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
@@ -43,7 +43,6 @@ export const POST = async (req: NextRequest) => {
     console.log(data);
 
     return NextResponse.json({
-      status: 500,
       message: "お店登録完了",
       data,
     });

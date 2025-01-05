@@ -22,10 +22,7 @@ export const GET = async (
         },
       },
     });
-    return NextResponse.json(
-      { category, message: "カテゴリー取得完了" },
-      { status: 200 }
-    );
+    return NextResponse.json(category);
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 401 });
@@ -61,10 +58,7 @@ export const PUT = async (
         name: category,
       },
     });
-    return NextResponse.json(
-      { message: "category更新完了", category: categoryName },
-      { status: 200 }
-    );
+    return NextResponse.json({ category: categoryName });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ message: error.message }, { status: 401 });
@@ -91,7 +85,7 @@ export const DELETE = async (
         },
       },
     });
-    return NextResponse.json({ message: "category削除完了" }, { status: 200 });
+    return NextResponse.json({ message: "category削除完了" });
   } catch (error) {
     if (error instanceof Error)
       return NextResponse.json({ message: error.message }, { status: 400 });

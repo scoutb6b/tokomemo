@@ -4,44 +4,50 @@ import { DeleteAnchor } from "@/app/_components/DeleteAnchor";
 import { EditSave } from "@/app/_components/EditSave";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
-import { Store } from "@/app/_types/ApiResponse/Store";
+import { Category } from "@/app/_types/ApiResponse/Category";
 import { TextInput } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { FormEventHandler, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
-const StoreIdPage: NextPage = () => {
+const CategoryIdPage: NextPage = () => {
   const { id } = useParams();
   const { token } = useSupabaseSession();
   const router = useRouter();
 
-  const { data: store, error, isLoading } = useFetch<Store>(`/api/store/${id}`);
+  const {
+    data: cateogry,
+    error,
+    isLoading,
+  } = useFetch<Category>(`/api/category/${id}`);
   const [name, setName] = useState("");
 
   useEffect(() => {
-    if (store?.name) {
-      setName(store?.name);
+    if (cateogry?.name) {
+      setName(cateogry?.name);
     }
-  }, [store]);
+  }, [cateogry]);
 
-  const handleSave: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSave = async (e: FormEvent<HTMLFormElement>) => {
     if (!token) return;
     e.preventDefault();
-    const storeName = {
-      store: name,
+    const categoryName = {
+      category: name,
     };
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/store/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify(storeName),
-      });
-      router.push("/store");
+      await fetch(
+        `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/category/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify(categoryName),
+        }
+      );
       notifications.show({
         title: "保存されました",
         message: "",
@@ -49,8 +55,15 @@ const StoreIdPage: NextPage = () => {
         position: "bottom-right",
         color: "green",
       });
+      router.push("/category");
     } catch (error) {
-      console.error(error);
+      notifications.show({
+        title: "エラーが発生しました",
+        message: `${error}`,
+        autoClose: 2500,
+        position: "bottom-right",
+        color: "red",
+      });
     }
   };
 
@@ -72,7 +85,7 @@ const StoreIdPage: NextPage = () => {
       onConfirm: async () => {
         try {
           await fetch(
-            `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/store/${id}`,
+            `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/category/${id}`,
             {
               method: "DELETE",
               headers: {
@@ -81,6 +94,7 @@ const StoreIdPage: NextPage = () => {
               },
             }
           );
+          router.push("/category");
           notifications.show({
             title: "完全に削除されました",
             message: "",
@@ -88,20 +102,21 @@ const StoreIdPage: NextPage = () => {
             position: "bottom-right",
             color: "red",
           });
-          router.push("/store");
         } catch (error) {
-          console.error(error);
+          notifications.show({
+            title: "エラーが発生しました",
+            message: `${error}`,
+            autoClose: 2500,
+            position: "bottom-right",
+            color: "red",
+          });
         }
       },
     });
   };
 
   if (error) {
-    return (
-      <div>
-        `store/{id}の{error.message}`
-      </div>
-    );
+    return <div>{error.message}</div>;
   }
   if (isLoading) {
     return <div>読み込み中...</div>;
@@ -109,11 +124,12 @@ const StoreIdPage: NextPage = () => {
 
   return (
     <div>
-      <form onSubmit={handleSave}>
+      <h1>カテゴリー編集</h1>
+      <form onSubmit={(e) => handleSave}>
         <TextInput
           size="md"
           radius="md"
-          label="お店"
+          label="カテゴリー"
           value={name}
           onChange={(e) => setName(e.currentTarget.value)}
         />
@@ -125,4 +141,4 @@ const StoreIdPage: NextPage = () => {
   );
 };
 
-export default StoreIdPage;
+export default CategoryIdPage;

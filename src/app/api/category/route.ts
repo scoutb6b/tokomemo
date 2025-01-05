@@ -1,5 +1,6 @@
 import prisma from "@/app/_libs/prisma";
 import { supabase } from "@/app/_libs/supabase";
+import { Category } from "@/app/_types/ApiResponse/Category";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
@@ -20,18 +21,17 @@ export const POST = async (req: NextRequest) => {
       { status: 404 }
     );
   }
-  const body = await req.json();
-  const { category } = body;
   try {
+    const body = await req.json();
+    const { name } = body;
     const data = await prisma.category.create({
       data: {
-        name: category,
+        name,
         userId: user.id,
       },
     });
     return NextResponse.json({
       message: "カテゴリー登録完了",
-      status: 200,
       data,
     });
   } catch (error) {
@@ -67,7 +67,7 @@ export const GET = async (req: NextRequest) => {
     });
     console.log(data);
 
-    return NextResponse.json({ data }, { status: 200 });
+    return NextResponse.json<Category[]>(data, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 402 });

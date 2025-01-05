@@ -3,7 +3,7 @@
 import { BottomSheet } from "@/app/_components/BottomSheet";
 import { List } from "@/app/_components/LIst";
 import { useFetch } from "@/app/_hooks/useFetch";
-import { Store } from "@/app/_types/apiResponse";
+import { Store } from "@/app/_types/ApiResponse/Store";
 import { NextPage } from "next"; //page.tsxにつける型
 
 const pageData = {
