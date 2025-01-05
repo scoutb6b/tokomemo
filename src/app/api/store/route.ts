@@ -43,7 +43,6 @@ export const POST = async (req: NextRequest) => {
     console.log(data);
 
     return NextResponse.json({
-      status: 500,
       message: "お店登録完了",
       data,
     });
