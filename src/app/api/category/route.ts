@@ -1,6 +1,6 @@
 import prisma from "@/app/_libs/prisma";
 import { supabase } from "@/app/_libs/supabase";
-import { Category } from "@/app/_types/apiResponse";
+import { Category } from "@/app/_types/ApiResponse/Category";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {

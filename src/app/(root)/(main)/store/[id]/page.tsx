@@ -4,7 +4,7 @@ import { DeleteAnchor } from "@/app/_components/DeleteAnchor";
 import { EditSave } from "@/app/_components/EditSave";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
-import { Store } from "@/app/_types/apiResponse";
+import { Store } from "@/app/_types/ApiResponse/Store";
 import { TextInput } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
