@@ -1,0 +1,8 @@
+.mainLayout {
+  width: 375px;
+  margin: 0 auto;
+
+  main {
+    padding-bottom: 100px;
+  }
+}
