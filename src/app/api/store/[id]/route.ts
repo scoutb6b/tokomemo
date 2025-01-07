@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const token = req.headers.get("Authorization") ?? "";
   const { data, error } = await supabase.auth.getUser(token);
@@ -15,7 +15,7 @@ export const GET = async (
   }
   const supabaseUserid = data.user?.id;
 
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const store = await prisma.store.findUnique({
@@ -38,7 +38,7 @@ export const GET = async (
 };
 export const PUT = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const token = req.headers.get("Authorization") ?? "";
   const { data, error } = await supabase.auth.getUser(token);
@@ -48,7 +48,7 @@ export const PUT = async (
   }
   const supabaseUserid = data.user?.id;
 
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const body = await req.json();
@@ -74,7 +74,7 @@ export const PUT = async (
 };
 export const DELETE = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const token = req.headers.get("Authorization") ?? "";
   const { data, error } = await supabase.auth.getUser(token);
@@ -83,7 +83,7 @@ export const DELETE = async (
     return NextResponse.json({ message: error.message }, { status: 400 });
   }
   const supabaseUserid = data.user?.id;
-  const { id } = params;
+  const { id } = await params;
   try {
     await prisma.store.delete({
       where: {

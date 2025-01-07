@@ -9,7 +9,7 @@ export type productBodyProps = {
 
 export const PUT = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const token = req.headers.get("Authorization") ?? "";
   const { data, error } = await supabase.auth.getUser(token);
@@ -31,7 +31,7 @@ export const PUT = async (
   }
   const body = await req.json();
   const { product, categoryId }: productBodyProps = body;
-  const { id } = params;
+  const { id } = await params;
   try {
     const item = await prisma.product.update({
       where: {
@@ -55,7 +55,7 @@ export const PUT = async (
 
 export const DELETE = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const token = req.headers.get("Authorization") ?? "";
   const { data, error } = await supabase.auth.getUser(token);
@@ -75,7 +75,7 @@ export const DELETE = async (
       { status: 404 }
     );
   }
-  const { id } = params;
+  const { id } = await params;
   try {
     await prisma.product.delete({
       where: {
