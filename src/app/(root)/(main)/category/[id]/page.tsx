@@ -125,7 +125,7 @@ const CategoryIdPage: NextPage = () => {
   return (
     <div>
       <h1>カテゴリー編集</h1>
-      <form onSubmit={(e) => handleSave}>
+      <form onSubmit={handleSave}>
         <TextInput
           size="md"
           radius="md"
