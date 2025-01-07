@@ -16,7 +16,7 @@ type titleProps = {
 };
 
 export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
-  const router = useRouter();
+  // const router = useRouter();
   const { token } = useSupabaseSession();
   const [name, setName] = useState("");
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
