@@ -1,11 +1,12 @@
 "use client";
 
 import { useRouteGuard } from "@/app/_hooks/useRouteGuard";
+import MainLayout from "@/app/layouts";
 
-const MainLayout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   useRouteGuard();
 
-  return <div>{children}</div>;
+  return <MainLayout>{children}</MainLayout>;
 };
 
-export default MainLayout;
+export default Layout;

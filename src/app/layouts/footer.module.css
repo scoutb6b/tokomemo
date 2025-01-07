@@ -1,0 +1,21 @@
+.flexGroup {
+  background: var(--c-mais-s);
+  padding: var(--mantine-spacing-sm) 37px;
+  margin: 0 auto;
+  bottom: 0;
+  position: fixed;
+}
+
+.footerActive {
+  color: var(--c-main-l);
+  &:hover {
+    color: var(--mantine-color-orange-4);
+  }
+}
+
+.footerNonActive {
+  color: var(--mantine-color-dark-4);
+  &:hover {
+    color: var(--mantine-color-orange-4);
+  }
+}

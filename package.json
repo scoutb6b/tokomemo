@@ -17,6 +17,7 @@
     "@prisma/client": "^5.21.1",
     "@supabase/supabase-js": "^2.46.1",
     "@tabler/icons-react": "^3.24.0",
+    "clsx": "^2.1.1",
     "mantine-form-zod-resolver": "^1.1.0",
     "next": "15.0.1",
     "react": "^18.3.1",
