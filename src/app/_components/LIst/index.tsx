@@ -2,7 +2,7 @@ import { Flex, Paper, Text } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import Link from "next/link";
 import c from "./index.module.css";
-import { Store } from "@/app/_types/apiResponse";
+import { Store } from "@/app/_types/ApiResponse/Store";
 
 type itemProps = {
   item: Pick<Store, "id" | "name">;
