@@ -44,7 +44,7 @@ export const POST = async (req: NextRequest) => {
         categoryId,
       },
     });
-    return NextResponse.json({ message: "product登録完了", item });
+    return NextResponse.json(item);
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 401 });
