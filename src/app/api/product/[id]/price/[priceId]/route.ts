@@ -34,6 +34,16 @@ export const GET = async (
           userId: user.id,
         },
       },
+      select: {
+        id: true,
+        price: true,
+        store: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
     return NextResponse.json(data);
   } catch (error) {
