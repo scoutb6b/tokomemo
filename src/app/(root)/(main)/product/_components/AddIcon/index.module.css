@@ -1,0 +1,15 @@
+.addIcon {
+  color: var(--c-white);
+  background: var(--c-main-l);
+  width: 64px;
+  height: 64px;
+  border-radius: 50px;
+  z-index: 2;
+  position: fixed;
+  bottom: 120px;
+  right: calc(50% - 187.5px + 20px);
+
+  &:hover {
+    background: var(--mantine-color-orange-6);
+  }
+}
