@@ -1,0 +1,8 @@
+.addBtn {
+  display: block;
+  margin: 40px auto;
+  background: var(--mantine-color-green-5);
+  &:hover {
+    background: var(--mantine-color-green-6);
+  }
+}
