@@ -15,6 +15,10 @@ body {
   color: var(--c-text);
 }
 
+h1 {
+  text-align: center;
+}
+
 main {
   width: 375px;
   max-width: 100%;
