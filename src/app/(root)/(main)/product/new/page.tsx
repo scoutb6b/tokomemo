@@ -7,11 +7,13 @@ import { FormEvent, useState } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { notifications } from "@mantine/notifications";
 import { NextPage } from "next";
+import { useRouter } from "next/navigation";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
 const ProductNewPage: NextPage = () => {
   const { token } = useSupabaseSession();
+  const router = useRouter();
   const [product, setProduct] = useState("");
   const [categoryId, setCategoryId] = useState("");
 
@@ -31,14 +33,18 @@ const ProductNewPage: NextPage = () => {
 
     e.preventDefault();
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({ product, categoryId }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({ product, categoryId }),
+        }
+      );
+      const createData = await res.json();
       notifications.show({
         title: "商品の登録が完了しました",
         message: "",
@@ -46,6 +52,7 @@ const ProductNewPage: NextPage = () => {
         position: "bottom-right",
         color: "green",
       });
+      router.push(`/product/${createData.id}`);
     } catch (error) {
       notifications.show({
         title: "エラーが発生しました",
