@@ -14,16 +14,24 @@ export const GET = async (
     return NextResponse.json({ message: error.message }, { status: 400 });
   }
   const supabaseUserid = data.user?.id;
-
+  const user = await prisma.user.findUnique({
+    where: {
+      supabaseUserid,
+    },
+  });
+  if (!user) {
+    return NextResponse.json(
+      { message: "登録しているユーザーから見つかりませんでした" },
+      { status: 404 }
+    );
+  }
   const { id } = await params;
 
   try {
     const store = await prisma.store.findUnique({
       where: {
         id,
-        user: {
-          supabaseUserid,
-        },
+        userId: user.id,
       },
       // select: {
       //   name: true,
@@ -47,7 +55,17 @@ export const PUT = async (
     return NextResponse.json({ message: error.message }, { status: 400 });
   }
   const supabaseUserid = data.user?.id;
-
+  const user = await prisma.user.findUnique({
+    where: {
+      supabaseUserid,
+    },
+  });
+  if (!user) {
+    return NextResponse.json(
+      { message: "登録しているユーザーから見つかりませんでした" },
+      { status: 404 }
+    );
+  }
   const { id } = await params;
 
   try {
@@ -58,9 +76,7 @@ export const PUT = async (
     const storeName = await prisma.store.update({
       where: {
         id,
-        user: {
-          supabaseUserid,
-        },
+        userId: user.id,
       },
       data: {
         name: store,
@@ -83,14 +99,23 @@ export const DELETE = async (
     return NextResponse.json({ message: error.message }, { status: 400 });
   }
   const supabaseUserid = data.user?.id;
+  const user = await prisma.user.findUnique({
+    where: {
+      supabaseUserid,
+    },
+  });
+  if (!user) {
+    return NextResponse.json(
+      { message: "登録しているユーザーから見つかりませんでした" },
+      { status: 404 }
+    );
+  }
   const { id } = await params;
   try {
     await prisma.store.delete({
       where: {
         id,
-        user: {
-          supabaseUserid,
-        },
+        userId: user.id,
       },
     });
     return NextResponse.json({ message: "store削除完了" });
