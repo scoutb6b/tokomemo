@@ -14,8 +14,8 @@ type CategorySelect = Pick<Category, "id" | "name">;
 const ProductNewPage: NextPage = () => {
   const { token } = useSupabaseSession();
   const router = useRouter();
-  const [product, setProduct] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [product, setProduct] = useState<string>("");
+  const [categoryId, setCategoryId] = useState<string>("");
 
   const { data: cateogries } = useFetch<Category[]>("/api/category");
 
@@ -41,7 +41,7 @@ const ProductNewPage: NextPage = () => {
             "Content-Type": "application/json",
             Authorization: token,
           },
-          body: JSON.stringify({ product, categoryId }),
+          body: JSON.stringify({ product, categoryId: categoryId || null }),
         }
       );
       const createData = await res.json();
