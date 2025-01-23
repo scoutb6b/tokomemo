@@ -1,6 +1,13 @@
 import prisma from "@/app/_libs/prisma";
 import { supabase } from "@/app/_libs/supabase";
+import { Price } from "@/app/_types/ApiResponse/Price";
 import { NextRequest, NextResponse } from "next/server";
+
+type PriceStoreBody = {
+  storeId: string;
+  productId: string;
+  price: number;
+};
 
 export const POST = async (
   req: NextRequest,
@@ -28,7 +35,7 @@ export const POST = async (
   }
   try {
     const body = await req.json();
-    const { storeId, price } = body;
+    const { storeId, price }: PriceStoreBody = body;
     await prisma.price.create({
       data: {
         storeId,
@@ -53,8 +60,8 @@ export const GET = async (
   if (error) {
     return NextResponse.json({ message: error.message }, { status: 400 });
   }
-  const supabaseUserid = data.user.id;
-  const user = prisma.user.findUnique({
+  const supabaseUserid = data.user?.id;
+  const user = await prisma.user.findUnique({
     where: {
       supabaseUserid,
     },
@@ -68,15 +75,29 @@ export const GET = async (
   const { id } = await params;
 
   try {
-    const data = prisma.price.findMany({
+    const data = await prisma.price.findMany({
       where: {
         productId: id,
+        store: {
+          userId: user.id,
+        },
       },
+      select: {
+        id: true,
+        price: true,
+        store: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+
       orderBy: {
         price: "asc",
       },
     });
-    return NextResponse.json(data);
+    return NextResponse.json<Price[]>(data);
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 401 });

@@ -1,7 +1,12 @@
 import prisma from "@/app/_libs/prisma";
 import { supabase } from "@/app/_libs/supabase";
+import { Price } from "@/app/_types/ApiResponse/Price";
 import { NextRequest, NextResponse } from "next/server";
 
+type PriceBody = {
+  storeId: string;
+  price: number;
+};
 export const GET = async (
   req: NextRequest,
   { params }: { params: Promise<{ priceId: string }> }
@@ -45,7 +50,7 @@ export const GET = async (
         },
       },
     });
-    return NextResponse.json(data);
+    return NextResponse.json<Price[]>(data);
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 401 });
@@ -79,7 +84,7 @@ export const PUT = async (
   }
   try {
     const body = await req.json();
-    const { storeId, price } = body;
+    const { storeId, price }: PriceBody = body;
     const updatePrice = await prisma.price.update({
       where: {
         id: priceId,
@@ -133,7 +138,7 @@ export const DELETE = async (
     );
   }
   try {
-    prisma.price.deleteMany({
+    await prisma.price.deleteMany({
       where: {
         id: priceId,
         store: {
@@ -141,6 +146,7 @@ export const DELETE = async (
         },
       },
     });
+    return NextResponse.json({ message: "priceId削除完了" });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 401 });
