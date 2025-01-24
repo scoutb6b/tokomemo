@@ -1,5 +1,5 @@
 "use client";
-import { NativeSelect, TextInput } from "@mantine/core";
+import { NativeSelect, TextInput, Text } from "@mantine/core";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { FormEvent, useEffect, useState } from "react";
@@ -9,6 +9,8 @@ import { EditSave } from "@/app/_components/EditSave";
 import { useParams, useRouter } from "next/navigation";
 import { Product } from "@/app/_types/ApiResponse/Product";
 import { notifications } from "@mantine/notifications";
+import { DeleteAnchor } from "@/app/_components/DeleteAnchor";
+import { modals } from "@mantine/modals";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
@@ -61,6 +63,48 @@ const ProductIdEditPage: NextPage = () => {
       console.error(error);
     }
   };
+
+  const handleDelte = () => {
+    if (!token) return;
+    modals.openConfirmModal({
+      title: "削除後に戻すことは出来ません",
+      centered: true,
+      labels: { confirm: "削除する", cancel: "キャンセルする" },
+      confirmProps: { color: "red" },
+      onCancel: () =>
+        notifications.show({
+          title: "キャンセルしました",
+          message: "",
+          autoClose: 1500,
+          position: "bottom-right",
+          color: "gray",
+        }),
+      onConfirm: async () => {
+        try {
+          await fetch(
+            `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product/${id}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+              },
+            }
+          );
+          notifications.show({
+            title: "削除されました",
+            message: "",
+            autoClose: 2500,
+            position: "bottom-right",
+            color: "green",
+          });
+          router.push(`/product/${id}`);
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    });
+  };
   if (error) {
     return <div>{error.message}</div>;
   }
@@ -88,6 +132,7 @@ const ProductIdEditPage: NextPage = () => {
           />
           <EditSave />
         </form>
+        <DeleteAnchor handleDelete={handleDelte} />
       </div>
     </div>
   );
