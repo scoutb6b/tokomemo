@@ -1,5 +1,5 @@
 "use client";
-import { NativeSelect, TextInput, Text } from "@mantine/core";
+import { NativeSelect, TextInput } from "@mantine/core";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { FormEvent, useEffect, useState } from "react";
@@ -107,6 +107,9 @@ const ProductIdEditPage: NextPage = () => {
   };
   if (error) {
     return <div>{error.message}</div>;
+  }
+  if (isLoading) {
+    return <div>読み込み中</div>;
   }
 
   return (
