@@ -50,8 +50,8 @@ const StorePage: NextPage = () => {
   if (isLoading) {
     return <div>読み込み中...</div>;
   }
-  if (!stores || stores.length === 0) {
-    return <div>まだ登録がありません。登録はこちら</div>;
+  if (stores?.length === 0) {
+    return <div>まだ登録がされていません。</div>;
   }
   console.log(stores);
 
@@ -60,7 +60,7 @@ const StorePage: NextPage = () => {
       <h1>{title}</h1>
 
       <div>
-        {stores.map((store) => {
+        {stores?.map((store) => {
           return <List key={store.id} item={store} basePath={basePath} />;
         })}
       </div>
