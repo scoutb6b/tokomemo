@@ -23,6 +23,9 @@ export const Tab = () => {
   if (isLoading) {
     return <div>...読み込み中</div>;
   }
+  if (categoryLoading) {
+    return <div>...読み込み中</div>;
+  }
   if (error) {
     return <div>{error.message}</div>;
   }

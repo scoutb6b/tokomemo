@@ -61,6 +61,9 @@ const ProductIdEditPage: NextPage = () => {
       console.error(error);
     }
   };
+  if (error) {
+    return <div>{error.message}</div>;
+  }
 
   return (
     <div>

@@ -39,6 +39,11 @@ const PriceIdPage: NextPage = () => {
       setStoreId(amount[0].store.id);
     }
   }, [amount]);
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
   if (isLoading) {
     return <div>...読み込み中</div>;
   }
