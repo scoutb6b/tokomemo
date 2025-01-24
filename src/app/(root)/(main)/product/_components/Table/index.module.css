@@ -1,0 +1,37 @@
+.head {
+  background: var(--mantine-color-orange-3);
+  padding: 10px 5px;
+
+  p {
+    font-size: 20px;
+  }
+}
+
+.row {
+  border-bottom: 1px solid var(--mantine-color-orange-2);
+  padding: 14px 5px 15px;
+  color: var(--c-text);
+  text-decoration: none;
+}
+
+.crown {
+  position: relative;
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.arrow {
+  position: relative;
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

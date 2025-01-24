@@ -1,0 +1,55 @@
+.trigger {
+  display: block;
+  margin: 40px auto;
+  background: var(--mantine-color-orange-5);
+  border: none;
+  padding: 8px 24px;
+  border-radius: 50px;
+  color: var(--c-white);
+  &:hover {
+    cursor: pointer;
+  }
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(95, 95, 95, 0.6);
+}
+
+.content {
+  background: var(--c-white);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  border-radius: 10px 10px 0 0;
+}
+
+.form {
+  margin: 0 auto;
+  width: 250px;
+}
+.handle {
+  margin: 8px auto 0;
+  width: 3rem;
+  height: 0.375rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background-color: #d4d4d8;
+  margin-bottom: 2rem;
+  cursor: pointer;
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 40px;
+}
+
+.addSubmit {
+  display: block;
+  margin: 40px auto 0;
+}
