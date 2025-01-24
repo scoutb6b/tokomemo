@@ -8,11 +8,8 @@ export const POST = async (req: NextRequest) => {
   console.log(token);
 
   const { data, error } = await supabase.auth.getUser(token);
-  console.log(data);
 
   if (error) {
-    console.log(error);
-
     return NextResponse.json({ message: error.message }, { status: 400 });
   }
   const supabaseUserid = data.user?.id;
@@ -21,7 +18,6 @@ export const POST = async (req: NextRequest) => {
       supabaseUserid,
     },
   });
-  console.log(user);
 
   if (!user) {
     return NextResponse.json(
@@ -32,7 +28,6 @@ export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const { name } = body;
-    console.log(body);
 
     const data = await prisma.store.create({
       data: {
@@ -40,7 +35,6 @@ export const POST = async (req: NextRequest) => {
         userId: user.id,
       },
     });
-    console.log(data);
 
     return NextResponse.json({
       message: "お店登録完了",
@@ -48,8 +42,6 @@ export const POST = async (req: NextRequest) => {
     });
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error.message);
-
       return NextResponse.json({ message: error.message }, { status: 401 });
     }
   }
@@ -79,7 +71,6 @@ export const GET = async (req: NextRequest) => {
         userId: user.id,
       },
     });
-    console.log(data);
 
     return NextResponse.json<Store[]>(data, { status: 200 });
   } catch (error) {

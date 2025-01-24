@@ -1,0 +1,5 @@
+.tabList {
+  margin-bottom: 20px;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+}

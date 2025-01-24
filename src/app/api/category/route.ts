@@ -65,7 +65,6 @@ export const GET = async (req: NextRequest) => {
         userId: user.id,
       },
     });
-    console.log(data);
 
     return NextResponse.json<Category[]>(data, { status: 200 });
   } catch (error) {

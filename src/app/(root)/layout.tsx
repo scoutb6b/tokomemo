@@ -1,6 +1,6 @@
 import "@mantine/core/styles.css";
 import "../globals.css";
-import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Notifications } from "@mantine/notifications";
@@ -11,10 +11,10 @@ export const metadata: Metadata = {
   title: "tokomemo",
   description: "自分だけの複数店舗での価格を比較するアプリ",
 };
-const theme = createTheme({
-  fontFamily: "Open Sans, sans-serif",
-  primaryColor: "cyan",
-});
+// const theme = createTheme({
+//   fontFamily: "Open Sans, sans-serif",
+//   primaryColor: "cyan",
+// });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -23,14 +23,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ColorSchemeScript />
       </head>
       <body>
-        <main>
-          <MantineProvider theme={theme}>
-            <ModalsProvider>
-              <Notifications />
-              {children}
-            </ModalsProvider>
-          </MantineProvider>
-        </main>
+        <MantineProvider>
+          <ModalsProvider>
+            <Notifications />
+            {children}
+          </ModalsProvider>
+        </MantineProvider>
       </body>
     </html>
   );

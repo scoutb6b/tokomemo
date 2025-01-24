@@ -21,13 +21,13 @@ const CategoryPage: NextPage = () => {
   } = useFetch<Category[]>("/api/category");
 
   if (error) {
-    return <div>err!!{error.message}</div>;
+    return <div>{error.message}</div>;
   }
   if (isLoading) {
     return <div>読み込み中...</div>;
   }
-  if (!cateogries || cateogries.length === 0) {
-    return <div>まだ登録がありません。登録はこちら</div>;
+  if (cateogries?.length === 0) {
+    return <div>まだ登録がされていません。</div>;
   }
 
   return (
@@ -35,7 +35,7 @@ const CategoryPage: NextPage = () => {
       <h1>{title}</h1>
 
       <div>
-        {cateogries.map((category) => {
+        {cateogries?.map((category) => {
           return <List key={category.id} item={category} basePath={basePath} />;
         })}
       </div>
