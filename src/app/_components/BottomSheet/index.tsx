@@ -8,6 +8,9 @@ import { FormEventHandler, useState } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 // import { useRouter } from "next/navigation";
 import { notifications } from "@mantine/notifications";
+import { useForm } from "@mantine/form";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { nameScheme } from "@/app/_libs/zod/schema";
 
 type titleProps = {
   title: string;
@@ -18,13 +21,21 @@ type titleProps = {
 export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
   // const router = useRouter();
   const { token } = useSupabaseSession();
-  const [name, setName] = useState("");
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
-
+  const form = useForm({
+    initialValues: {
+      name: "",
+    },
+    validate: zodResolver(nameScheme),
+  });
   const clickCreate: FormEventHandler<HTMLFormElement> = async (e) => {
     if (!token) return;
-
     e.preventDefault();
+    if (form.validate().hasErrors) {
+      console.error("バリデーションエラー");
+      return;
+    }
+    const { name } = form.getValues();
     try {
       await fetch(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/${basePath}`, {
         method: "POST",
@@ -35,10 +46,17 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
         body: JSON.stringify({ name }),
       });
       // window.location.reload();
-      setName("");
       // router.refresh()
+      form.reset();
       setIsOpen(false);
       mutate();
+      notifications.show({
+        title: `${title}が新しく追加されました`,
+        message: "",
+        autoClose: 2500,
+        position: "bottom-right",
+        color: "green",
+      });
     } catch (error) {
       notifications.show({
         title: "エラーが発生しました",
@@ -73,8 +91,9 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               size="md"
               radius="md"
               label=""
-              value={name}
-              onChange={(e) => setName(e.currentTarget.value)}
+              name="name"
+              {...form.getInputProps("name")}
+              error={form.errors.name}
             />
             <Button
               type="submit"
