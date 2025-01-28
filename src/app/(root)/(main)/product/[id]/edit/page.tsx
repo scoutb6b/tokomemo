@@ -138,7 +138,6 @@ const ProductIdEditPage: NextPage = () => {
             radius="md"
             label="商品名"
             {...form.getInputProps("product")}
-            error={form.errors.product}
           />
           <NativeSelect
             size="md"

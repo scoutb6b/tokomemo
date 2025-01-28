@@ -128,7 +128,6 @@ const StoreIdPage: NextPage = () => {
           label="お店"
           name="name"
           {...form.getInputProps("name")}
-          error={form.errors.name}
         />
 
         <EditSave />

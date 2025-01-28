@@ -146,7 +146,6 @@ const CategoryIdPage: NextPage = () => {
           label="カテゴリー"
           name="name"
           {...form.getInputProps("name")}
-          error={form.errors.name}
         />
 
         <EditSave />

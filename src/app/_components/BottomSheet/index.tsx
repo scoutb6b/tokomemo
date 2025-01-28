@@ -93,7 +93,6 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               label=""
               name="name"
               {...form.getInputProps("name")}
-              error={form.errors.name}
             />
             <Button
               type="submit"
