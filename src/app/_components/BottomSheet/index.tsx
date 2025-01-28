@@ -6,7 +6,6 @@ import { Drawer } from "vaul";
 import c from "./index.module.css";
 import { FormEventHandler, useState } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
-// import { useRouter } from "next/navigation";
 import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
@@ -19,7 +18,6 @@ type titleProps = {
 };
 
 export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
-  // const router = useRouter();
   const { token } = useSupabaseSession();
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
   const form = useForm({
@@ -45,8 +43,6 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
         },
         body: JSON.stringify({ name }),
       });
-      // window.location.reload();
-      // router.refresh()
       form.reset();
       setIsOpen(false);
       mutate();

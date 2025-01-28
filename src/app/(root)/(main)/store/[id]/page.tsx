@@ -13,7 +13,7 @@ import { notifications } from "@mantine/notifications";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { FormEventHandler, useEffect, useState } from "react";
+import { FormEventHandler, useEffect } from "react";
 
 const StoreIdPage: NextPage = () => {
   const { id } = useParams();

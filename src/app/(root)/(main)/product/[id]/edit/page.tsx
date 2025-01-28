@@ -2,7 +2,7 @@
 import { NativeSelect, TextInput } from "@mantine/core";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { NextPage } from "next";
 import { EditSave } from "@/app/_components/EditSave";
