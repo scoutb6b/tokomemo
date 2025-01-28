@@ -11,6 +11,9 @@ import { Product } from "@/app/_types/ApiResponse/Product";
 import { notifications } from "@mantine/notifications";
 import { DeleteAnchor } from "@/app/_components/DeleteAnchor";
 import { modals } from "@mantine/modals";
+import { useForm } from "@mantine/form";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { productScheme } from "@/app/_libs/zod/schema";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
@@ -18,11 +21,9 @@ const ProductIdEditPage: NextPage = () => {
   const { token } = useSupabaseSession();
   const { id } = useParams();
   const router = useRouter();
-  const [product, setProduct] = useState<string | undefined>(undefined);
-  const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
 
   const { data: cateogries } = useFetch<Category[]>("/api/category");
-  const { data, error, isLoading } = useFetch<Product>(`/api/product/${id}`);
+  const { data, error, isLoading } = useFetch<Product[]>(`/api/product/${id}`);
 
   const categoryArr = cateogries?.map((category: CategorySelect) => {
     return { value: category.id, label: category.name };
@@ -32,16 +33,31 @@ const ProductIdEditPage: NextPage = () => {
     { value: "", label: "カテゴリなし" },
     ...(categoryArr ?? []),
   ];
+  const form = useForm({
+    initialValues: {
+      product: "",
+      categoryId: "",
+    },
+    validate: zodResolver(productScheme),
+  });
+
   useEffect(() => {
     if (data) {
-      setProduct(data.name);
-      setCategoryId(data.category?.id);
+      form.setValues({
+        product: data[0].name,
+        categoryId: data[0].category?.id,
+      });
     }
   }, [data]);
 
   const handleEdit = async (e: FormEvent<HTMLFormElement>) => {
     if (!token) return;
     e.preventDefault();
+    if (form.validate().hasErrors) {
+      console.error("バリデーションエラー");
+      return;
+    }
+    const { product, categoryId } = form.getValues();
     try {
       await fetch(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product/${id}`, {
         method: "PUT",
@@ -49,7 +65,7 @@ const ProductIdEditPage: NextPage = () => {
           "Content-Type": "application/json",
           Authorization: token,
         },
-        body: JSON.stringify({ product, categoryId }),
+        body: JSON.stringify({ product, categoryId: categoryId || null }),
       });
       notifications.show({
         title: "保存されました",
@@ -121,16 +137,15 @@ const ProductIdEditPage: NextPage = () => {
             size="md"
             radius="md"
             label="商品名"
-            value={product}
-            onChange={(e) => setProduct(e.currentTarget.value)}
+            {...form.getInputProps("product")}
+            error={form.errors.product}
           />
           <NativeSelect
             size="md"
             radius="md"
             mt="lg"
             label="カテゴリー"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.currentTarget.value)}
+            {...form.getInputProps("categoryId")}
             data={categorySelect}
           />
           <EditSave />

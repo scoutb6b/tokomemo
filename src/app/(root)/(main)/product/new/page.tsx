@@ -8,14 +8,15 @@ import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { notifications } from "@mantine/notifications";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
+import { useForm } from "@mantine/form";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { productScheme } from "@/app/_libs/zod/schema";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
 const ProductNewPage: NextPage = () => {
   const { token } = useSupabaseSession();
   const router = useRouter();
-  const [product, setProduct] = useState<string>("");
-  const [categoryId, setCategoryId] = useState<string>("");
 
   const { data: cateogries } = useFetch<Category[]>("/api/category");
 
@@ -27,11 +28,22 @@ const ProductNewPage: NextPage = () => {
     { value: "", label: "カテゴリなし" },
     ...(categoryArr ?? []),
   ];
+  const form = useForm({
+    initialValues: {
+      product: "",
+      categoryId: "",
+    },
+    validate: zodResolver(productScheme),
+  });
 
   const clickCreate = async (e: FormEvent<HTMLFormElement>) => {
     if (!token) return;
-
     e.preventDefault();
+    if (form.validate().hasErrors) {
+      console.error("バリデーションエラー");
+      return;
+    }
+    const { product, categoryId } = form.getValues();
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product`,
@@ -73,16 +85,15 @@ const ProductNewPage: NextPage = () => {
             size="md"
             radius="md"
             label="商品名"
-            value={product}
-            onChange={(e) => setProduct(e.currentTarget.value)}
+            {...form.getInputProps("product")}
+            error={form.errors.product}
           />
           <NativeSelect
             size="md"
             radius="md"
             mt="lg"
-            label="カテゴリー"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.currentTarget.value)}
+            label="カテゴリー(なしでも登録可能です)"
+            {...form.getInputProps("categoryId")}
             data={categorySelect}
           />
           <AddButton />
