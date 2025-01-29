@@ -9,6 +9,9 @@ import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { notifications } from "@mantine/notifications";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Store } from "@/app/_types/ApiResponse/Store";
+import { useForm } from "@mantine/form";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { priceScheme } from "@/app/_libs/zod/schema";
 
 type titleProps = {
   title: string;
@@ -19,20 +22,36 @@ type StoreSelect = Pick<Store, "id" | "name">;
 
 export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
   const { token } = useSupabaseSession();
-  const [storeId, setStoreId] = useState("");
-  const [price, setPrice] = useState("");
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
 
   const { data: stores } = useFetch<Store[]>("/api/store");
 
-  const storeSelect = stores?.map((store: StoreSelect) => {
-    return { value: store.id, label: store.name };
+  const form = useForm({
+    initialValues: {
+      storeId: "",
+      price: "",
+    },
+    validate: zodResolver(priceScheme),
   });
+
+  const storeArr =
+    stores && stores.length > 0
+      ? stores.map((store: StoreSelect) => ({
+          value: store.id,
+          label: store.name,
+        }))
+      : [];
+
+  const storeSelect = [{ value: "", label: "選択してください" }, ...storeArr];
 
   const clickCreate: FormEventHandler<HTMLFormElement> = async (e) => {
     if (!token) return;
-
     e.preventDefault();
+    if (form.validate().hasErrors) {
+      console.error("バリデーションエラー");
+      return;
+    }
+    const { storeId, price } = form.getValues();
     try {
       await fetch(
         `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/${basePath}/price`,
@@ -43,10 +62,9 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
             Authorization: token,
           },
           body: JSON.stringify({ storeId, price: Number(price) }),
-          //priceはzodでnumberのバリデーションを行う
         }
       );
-      setPrice("");
+      form.reset();
       setIsOpen(false);
       mutate();
       notifications.show({
@@ -90,8 +108,8 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               size="md"
               radius="md"
               label="お店"
-              value={storeId}
-              onChange={(e) => setStoreId(e.currentTarget.value)}
+              name="storeId"
+              {...form.getInputProps("storeId")}
               data={storeSelect}
             />
 
@@ -100,8 +118,10 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               radius="md"
               mt="lg"
               label="価格"
-              value={price}
-              onChange={(e) => setPrice(e.currentTarget.value)}
+              name="price"
+              type="number"
+              inputMode="numeric"
+              {...form.getInputProps("price")}
             />
             <Button
               type="submit"
