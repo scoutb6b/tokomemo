@@ -18,16 +18,17 @@ const ProductNewPage: NextPage = () => {
   const { token } = useSupabaseSession();
   const router = useRouter();
 
-  const { data: cateogries } = useFetch<Category[]>("/api/category");
+  const { data: categories } = useFetch<Category[]>("/api/category");
 
-  const categoryArr = cateogries?.map((category: CategorySelect) => {
-    return { value: category.id, label: category.name };
-  });
+  const categoryArr =
+    categories && categories.length > 0
+      ? categories.map((category: CategorySelect) => ({
+          value: category.id,
+          label: category.name,
+        }))
+      : [];
 
-  const categorySelect = [
-    { value: "", label: "カテゴリなし" },
-    ...(categoryArr ?? []),
-  ];
+  const categorySelect = [{ value: "", label: "カテゴリなし" }, ...categoryArr];
   const form = useForm({
     initialValues: {
       product: "",
