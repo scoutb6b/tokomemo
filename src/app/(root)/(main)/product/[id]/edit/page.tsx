@@ -34,6 +34,7 @@ const ProductIdEditPage: NextPage = () => {
     ...(categoryArr ?? []),
   ];
   const form = useForm({
+    mode: "uncontrolled",
     initialValues: {
       product: "",
       categoryId: "",
@@ -50,9 +51,12 @@ const ProductIdEditPage: NextPage = () => {
     }
   }, [data]);
 
-  const handleEdit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleEdit = async (
+    _value: typeof form.values,
+    e: FormEvent<HTMLFormElement> | undefined
+  ) => {
     if (!token) return;
-    e.preventDefault();
+    e?.preventDefault();
     if (form.validate().hasErrors) {
       console.error("バリデーションエラー");
       return;
@@ -132,12 +136,13 @@ const ProductIdEditPage: NextPage = () => {
     <div>
       <h1>商品編集</h1>
       <div>
-        <form onSubmit={handleEdit}>
+        <form onSubmit={form.onSubmit(handleEdit)}>
           <TextInput
             size="md"
             radius="md"
             label="商品名"
             {...form.getInputProps("product")}
+            disabled={form.submitting}
           />
           <NativeSelect
             size="md"
@@ -146,8 +151,9 @@ const ProductIdEditPage: NextPage = () => {
             label="カテゴリー"
             {...form.getInputProps("categoryId")}
             data={categorySelect}
+            disabled={form.submitting}
           />
-          <EditSave />
+          <EditSave submitting={form.submitting} />
         </form>
         <DeleteAnchor handleDelete={handleDelte} />
       </div>

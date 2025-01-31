@@ -13,7 +13,7 @@ import { notifications } from "@mantine/notifications";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { FormEventHandler, useEffect } from "react";
+import { FormEvent, useEffect } from "react";
 
 const StoreIdPage: NextPage = () => {
   const { id } = useParams();
@@ -22,6 +22,7 @@ const StoreIdPage: NextPage = () => {
 
   const { data: store, error, isLoading } = useFetch<Store>(`/api/store/${id}`);
   const form = useForm({
+    mode: "uncontrolled",
     initialValues: {
       name: "",
     },
@@ -33,9 +34,12 @@ const StoreIdPage: NextPage = () => {
     }
   }, [store]);
 
-  const handleSave: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSave = async (
+    _value: typeof form.values,
+    e: FormEvent<HTMLFormElement> | undefined
+  ) => {
     if (!token) return;
-    e.preventDefault();
+    e?.preventDefault();
     if (form.validate().hasErrors) {
       console.error("バリデーションエラー");
       return;
@@ -65,6 +69,7 @@ const StoreIdPage: NextPage = () => {
       console.error(error);
     }
   };
+  console.log(form);
 
   const handleDelete = () => {
     if (!token) return;
@@ -109,11 +114,7 @@ const StoreIdPage: NextPage = () => {
   };
 
   if (error) {
-    return (
-      <div>
-        `store/{id}の{error.message}`
-      </div>
-    );
+    return <div>{error.message}</div>;
   }
   if (isLoading) {
     return <div>読み込み中...</div>;
@@ -121,16 +122,17 @@ const StoreIdPage: NextPage = () => {
 
   return (
     <div>
-      <form onSubmit={handleSave}>
+      <form onSubmit={form.onSubmit(handleSave)}>
         <TextInput
           size="md"
           radius="md"
           label="お店"
           name="name"
           {...form.getInputProps("name")}
+          disabled={form.submitting}
         />
 
-        <EditSave />
+        <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelete} />
     </div>

@@ -30,6 +30,7 @@ const ProductNewPage: NextPage = () => {
 
   const categorySelect = [{ value: "", label: "カテゴリなし" }, ...categoryArr];
   const form = useForm({
+    mode: "uncontrolled",
     initialValues: {
       product: "",
       categoryId: "",
@@ -37,9 +38,12 @@ const ProductNewPage: NextPage = () => {
     validate: zodResolver(productScheme),
   });
 
-  const clickCreate = async (e: FormEvent<HTMLFormElement>) => {
+  const clickCreate = async (
+    _value: typeof form.values,
+    e: FormEvent<HTMLFormElement> | undefined
+  ) => {
     if (!token) return;
-    e.preventDefault();
+    e?.preventDefault();
     if (form.validate().hasErrors) {
       console.error("バリデーションエラー");
       return;
@@ -81,13 +85,14 @@ const ProductNewPage: NextPage = () => {
     <div>
       <h1>商品追加</h1>
       <div>
-        <form onSubmit={clickCreate}>
+        <form onSubmit={form.onSubmit(clickCreate)}>
           <TextInput
             size="md"
             radius="md"
             label="商品名"
             {...form.getInputProps("product")}
             error={form.errors.product}
+            disabled={form.submitting}
           />
           <NativeSelect
             size="md"
@@ -96,8 +101,9 @@ const ProductNewPage: NextPage = () => {
             label="カテゴリー(なしでも登録可能です)"
             {...form.getInputProps("categoryId")}
             data={categorySelect}
+            disabled={form.submitting}
           />
-          <AddButton />
+          <AddButton submitting={form.submitting} />
         </form>
       </div>
     </div>

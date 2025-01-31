@@ -4,7 +4,7 @@ import { Button, Flex, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { Drawer } from "vaul";
 import c from "./index.module.css";
-import { FormEventHandler, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
@@ -21,14 +21,18 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
   const { token } = useSupabaseSession();
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
   const form = useForm({
+    mode: "uncontrolled",
     initialValues: {
       name: "",
     },
     validate: zodResolver(nameScheme),
   });
-  const clickCreate: FormEventHandler<HTMLFormElement> = async (e) => {
+  const clickCreate = async (
+    _value: typeof form.values,
+    e: FormEvent<HTMLFormElement> | undefined
+  ) => {
     if (!token) return;
-    e.preventDefault();
+    e?.preventDefault();
     if (form.validate().hasErrors) {
       console.error("バリデーションエラー");
       return;
@@ -78,7 +82,7 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
       <Portal>
         <Overlay className={c.overlay} />
         <Content className={c.content}>
-          <form onSubmit={clickCreate} className={c.form}>
+          <form onSubmit={form.onSubmit(clickCreate)} className={c.form}>
             <div className={c.handle}></div>
             <Title className={c.title}>{title}を追加する</Title>
             <Description />
@@ -89,6 +93,7 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               label=""
               name="name"
               {...form.getInputProps("name")}
+              disabled={form.submitting}
             />
             <Button
               type="submit"
@@ -96,6 +101,7 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               size="md"
               color="green"
               className={c.addSubmit}
+              loading={form.submitting}
             >
               追加する
             </Button>

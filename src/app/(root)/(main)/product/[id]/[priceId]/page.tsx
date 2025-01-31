@@ -28,6 +28,7 @@ const PriceIdPage: NextPage = () => {
   const { data: stores } = useFetch<Store[]>("/api/store");
 
   const form = useForm<{ storeId: string | null; price: number | null }>({
+    mode: "uncontrolled",
     initialValues: {
       storeId: null,
       price: null,
@@ -55,9 +56,12 @@ const PriceIdPage: NextPage = () => {
   if (isLoading) {
     return <div>...読み込み中</div>;
   }
-  const handleSave = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSave = async (
+    _value: typeof form.values,
+    e: FormEvent<HTMLFormElement> | undefined
+  ) => {
     if (!token) return;
-    e.preventDefault();
+    e?.preventDefault();
     if (form.validate().hasErrors) {
       console.error("バリデーションエラー");
       return;
@@ -132,13 +136,14 @@ const PriceIdPage: NextPage = () => {
   };
   return (
     <div>
-      <form onSubmit={handleSave}>
+      <form onSubmit={form.onSubmit(handleSave)}>
         <NativeSelect
           size="md"
           radius="md"
           label="お店"
           {...form.getInputProps("storeId")}
           data={storeSelect}
+          disabled={form.submitting}
         />
         <TextInput
           size="md"
@@ -148,9 +153,10 @@ const PriceIdPage: NextPage = () => {
           type="number"
           inputMode="numeric"
           {...form.getInputProps("price")}
+          disabled={form.submitting}
         />
 
-        <EditSave />
+        <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelete} />
     </div>

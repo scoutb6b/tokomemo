@@ -27,6 +27,7 @@ const CategoryIdPage: NextPage = () => {
   } = useFetch<Category>(`/api/category/${id}`);
 
   const form = useForm({
+    mode: "uncontrolled",
     initialValues: {
       name: "",
     },
@@ -39,9 +40,13 @@ const CategoryIdPage: NextPage = () => {
     }
   }, [cateogry]);
 
-  const handleSave = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSave = async (
+    _value: typeof form.values,
+    e: FormEvent<HTMLFormElement> | undefined
+  ) => {
+    //typeof *** その型をコピーして持ってくる的な
     if (!token) return;
-    e.preventDefault();
+    e?.preventDefault();
     if (form.validate().hasErrors) {
       console.error("バリデーションエラー");
       return;
@@ -139,16 +144,17 @@ const CategoryIdPage: NextPage = () => {
   return (
     <div>
       <h1>カテゴリー編集</h1>
-      <form onSubmit={handleSave}>
+      <form onSubmit={form.onSubmit(handleSave)}>
         <TextInput
           size="md"
           radius="md"
           label="カテゴリー"
           name="name"
           {...form.getInputProps("name")}
+          disabled={form.submitting}
         />
 
-        <EditSave />
+        <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelete} />
     </div>
