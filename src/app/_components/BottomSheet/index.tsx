@@ -4,10 +4,12 @@ import { Button, Flex, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { Drawer } from "vaul";
 import c from "./index.module.css";
-import { FormEventHandler, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
-// import { useRouter } from "next/navigation";
 import { notifications } from "@mantine/notifications";
+import { useForm } from "@mantine/form";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { nameScheme } from "@/app/_libs/zod/schema";
 
 type titleProps = {
   title: string;
@@ -16,15 +18,26 @@ type titleProps = {
 };
 
 export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
-  // const router = useRouter();
   const { token } = useSupabaseSession();
-  const [name, setName] = useState("");
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
-
-  const clickCreate: FormEventHandler<HTMLFormElement> = async (e) => {
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      name: "",
+    },
+    validate: zodResolver(nameScheme),
+  });
+  const clickCreate = async (
+    _value: typeof form.values,
+    e: FormEvent<HTMLFormElement> | undefined
+  ) => {
     if (!token) return;
-
-    e.preventDefault();
+    e?.preventDefault();
+    if (form.validate().hasErrors) {
+      console.error("バリデーションエラー");
+      return;
+    }
+    const { name } = form.getValues();
     try {
       await fetch(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/${basePath}`, {
         method: "POST",
@@ -34,11 +47,16 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
         },
         body: JSON.stringify({ name }),
       });
-      // window.location.reload();
-      setName("");
-      // router.refresh()
+      form.reset();
       setIsOpen(false);
       mutate();
+      notifications.show({
+        title: `${title}が新しく追加されました`,
+        message: "",
+        autoClose: 2500,
+        position: "bottom-right",
+        color: "green",
+      });
     } catch (error) {
       notifications.show({
         title: "エラーが発生しました",
@@ -64,7 +82,7 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
       <Portal>
         <Overlay className={c.overlay} />
         <Content className={c.content}>
-          <form onSubmit={clickCreate} className={c.form}>
+          <form onSubmit={form.onSubmit(clickCreate)} className={c.form}>
             <div className={c.handle}></div>
             <Title className={c.title}>{title}を追加する</Title>
             <Description />
@@ -73,8 +91,9 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               size="md"
               radius="md"
               label=""
-              value={name}
-              onChange={(e) => setName(e.currentTarget.value)}
+              name="name"
+              {...form.getInputProps("name")}
+              disabled={form.submitting}
             />
             <Button
               type="submit"
@@ -82,6 +101,7 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               size="md"
               color="green"
               className={c.addSubmit}
+              loading={form.submitting}
             >
               追加する
             </Button>

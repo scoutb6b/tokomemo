@@ -4,13 +4,16 @@ import { DeleteAnchor } from "@/app/_components/DeleteAnchor";
 import { EditSave } from "@/app/_components/EditSave";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
+import { nameScheme } from "@/app/_libs/zod/schema";
 import { Store } from "@/app/_types/ApiResponse/Store";
 import { TextInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
+import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { FormEventHandler, useEffect, useState } from "react";
+import { FormEvent, useEffect } from "react";
 
 const StoreIdPage: NextPage = () => {
   const { id } = useParams();
@@ -18,17 +21,30 @@ const StoreIdPage: NextPage = () => {
   const router = useRouter();
 
   const { data: store, error, isLoading } = useFetch<Store>(`/api/store/${id}`);
-  const [name, setName] = useState("");
-
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      name: "",
+    },
+    validate: zodResolver(nameScheme),
+  });
   useEffect(() => {
     if (store?.name) {
-      setName(store?.name);
+      form.setValues({ name: store?.name });
     }
   }, [store]);
 
-  const handleSave: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSave = async (
+    _value: typeof form.values,
+    e: FormEvent<HTMLFormElement> | undefined
+  ) => {
     if (!token) return;
-    e.preventDefault();
+    e?.preventDefault();
+    if (form.validate().hasErrors) {
+      console.error("バリデーションエラー");
+      return;
+    }
+    const { name } = form.getValues();
     const storeName = {
       store: name,
     };
@@ -53,6 +69,7 @@ const StoreIdPage: NextPage = () => {
       console.error(error);
     }
   };
+  console.log(form);
 
   const handleDelete = () => {
     if (!token) return;
@@ -97,11 +114,7 @@ const StoreIdPage: NextPage = () => {
   };
 
   if (error) {
-    return (
-      <div>
-        `store/{id}の{error.message}`
-      </div>
-    );
+    return <div>{error.message}</div>;
   }
   if (isLoading) {
     return <div>読み込み中...</div>;
@@ -109,16 +122,17 @@ const StoreIdPage: NextPage = () => {
 
   return (
     <div>
-      <form onSubmit={handleSave}>
+      <form onSubmit={form.onSubmit(handleSave)}>
         <TextInput
           size="md"
           radius="md"
           label="お店"
-          value={name}
-          onChange={(e) => setName(e.currentTarget.value)}
+          name="name"
+          {...form.getInputProps("name")}
+          disabled={form.submitting}
         />
 
-        <EditSave />
+        <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelete} />
     </div>

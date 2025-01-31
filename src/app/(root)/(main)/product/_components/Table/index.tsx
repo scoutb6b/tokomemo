@@ -1,5 +1,5 @@
 "use client";
-import { Text, Stack, Grid, GridCol } from "@mantine/core";
+import { Text, Stack, Grid, GridCol, NumberFormatter } from "@mantine/core";
 import { IconChevronRight, IconCrown } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -43,7 +43,9 @@ export const Table = ({ prices, err, isLoading }: Props) => {
                   <Text size="xl">{price.store.name}</Text>
                 </GridCol>
                 <GridCol span={5}>
-                  <Text size="xl">{price.price}</Text>
+                  <Text size="xl">
+                    <NumberFormatter value={price.price} thousandSeparator />
+                  </Text>
                 </GridCol>
                 <GridCol span={1} className={c.arrow}>
                   <IconChevronRight />

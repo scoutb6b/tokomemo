@@ -4,11 +4,14 @@ import { Button, Flex, NativeSelect, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { Drawer } from "vaul";
 import c from "./index.module.css";
-import { FormEventHandler, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { notifications } from "@mantine/notifications";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Store } from "@/app/_types/ApiResponse/Store";
+import { useForm } from "@mantine/form";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { priceScheme } from "@/app/_libs/zod/schema";
 
 type titleProps = {
   title: string;
@@ -19,20 +22,40 @@ type StoreSelect = Pick<Store, "id" | "name">;
 
 export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
   const { token } = useSupabaseSession();
-  const [storeId, setStoreId] = useState("");
-  const [price, setPrice] = useState("");
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
 
   const { data: stores } = useFetch<Store[]>("/api/store");
 
-  const storeSelect = stores?.map((store: StoreSelect) => {
-    return { value: store.id, label: store.name };
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      storeId: "",
+      price: "",
+    },
+    validate: zodResolver(priceScheme),
   });
 
-  const clickCreate: FormEventHandler<HTMLFormElement> = async (e) => {
-    if (!token) return;
+  const storeArr =
+    stores && stores.length > 0
+      ? stores.map((store: StoreSelect) => ({
+          value: store.id,
+          label: store.name,
+        }))
+      : [];
 
-    e.preventDefault();
+  const storeSelect = [{ value: "", label: "選択してください" }, ...storeArr];
+
+  const clickCreate = async (
+    _value: typeof form.values,
+    e: FormEvent<HTMLFormElement> | undefined
+  ) => {
+    if (!token) return;
+    e?.preventDefault();
+    if (form.validate().hasErrors) {
+      console.error("バリデーションエラー");
+      return;
+    }
+    const { storeId, price } = form.getValues();
     try {
       await fetch(
         `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/${basePath}/price`,
@@ -43,10 +66,9 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
             Authorization: token,
           },
           body: JSON.stringify({ storeId, price: Number(price) }),
-          //priceはzodでnumberのバリデーションを行う
         }
       );
-      setPrice("");
+      form.reset();
       setIsOpen(false);
       mutate();
       notifications.show({
@@ -81,7 +103,7 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
       <Portal>
         <Overlay className={c.overlay} />
         <Content className={c.content}>
-          <form onSubmit={clickCreate} className={c.form}>
+          <form onSubmit={form.onSubmit(clickCreate)} className={c.form}>
             <div className={c.handle}></div>
             <Title className={c.title}>{title}を追加する</Title>
             <Description />
@@ -90,9 +112,10 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               size="md"
               radius="md"
               label="お店"
-              value={storeId}
-              onChange={(e) => setStoreId(e.currentTarget.value)}
+              name="storeId"
+              {...form.getInputProps("storeId")}
               data={storeSelect}
+              disabled={form.submitting}
             />
 
             <TextInput
@@ -100,8 +123,11 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               radius="md"
               mt="lg"
               label="価格"
-              value={price}
-              onChange={(e) => setPrice(e.currentTarget.value)}
+              name="price"
+              type="number"
+              inputMode="numeric"
+              {...form.getInputProps("price")}
+              disabled={form.submitting}
             />
             <Button
               type="submit"
@@ -109,6 +135,7 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
               size="md"
               color="green"
               className={c.addSubmit}
+              loading={form.submitting}
             >
               追加する
             </Button>

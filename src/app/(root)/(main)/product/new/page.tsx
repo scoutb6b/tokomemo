@@ -3,35 +3,52 @@ import { NativeSelect, TextInput } from "@mantine/core";
 import { AddButton } from "../_components/AddButton";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { notifications } from "@mantine/notifications";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
+import { useForm } from "@mantine/form";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { productScheme } from "@/app/_libs/zod/schema";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
 const ProductNewPage: NextPage = () => {
   const { token } = useSupabaseSession();
   const router = useRouter();
-  const [product, setProduct] = useState<string>("");
-  const [categoryId, setCategoryId] = useState<string>("");
 
-  const { data: cateogries } = useFetch<Category[]>("/api/category");
+  const { data: categories } = useFetch<Category[]>("/api/category");
 
-  const categoryArr = cateogries?.map((category: CategorySelect) => {
-    return { value: category.id, label: category.name };
+  const categoryArr =
+    categories && categories.length > 0
+      ? categories.map((category: CategorySelect) => ({
+          value: category.id,
+          label: category.name,
+        }))
+      : [];
+
+  const categorySelect = [{ value: "", label: "カテゴリなし" }, ...categoryArr];
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      product: "",
+      categoryId: "",
+    },
+    validate: zodResolver(productScheme),
   });
 
-  const categorySelect = [
-    { value: "", label: "カテゴリなし" },
-    ...(categoryArr ?? []),
-  ];
-
-  const clickCreate = async (e: FormEvent<HTMLFormElement>) => {
+  const clickCreate = async (
+    _value: typeof form.values,
+    e: FormEvent<HTMLFormElement> | undefined
+  ) => {
     if (!token) return;
-
-    e.preventDefault();
+    e?.preventDefault();
+    if (form.validate().hasErrors) {
+      console.error("バリデーションエラー");
+      return;
+    }
+    const { product, categoryId } = form.getValues();
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product`,
@@ -68,24 +85,25 @@ const ProductNewPage: NextPage = () => {
     <div>
       <h1>商品追加</h1>
       <div>
-        <form onSubmit={clickCreate}>
+        <form onSubmit={form.onSubmit(clickCreate)}>
           <TextInput
             size="md"
             radius="md"
             label="商品名"
-            value={product}
-            onChange={(e) => setProduct(e.currentTarget.value)}
+            {...form.getInputProps("product")}
+            error={form.errors.product}
+            disabled={form.submitting}
           />
           <NativeSelect
             size="md"
             radius="md"
             mt="lg"
-            label="カテゴリー"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.currentTarget.value)}
+            label="カテゴリー(なしでも登録可能です)"
+            {...form.getInputProps("categoryId")}
             data={categorySelect}
+            disabled={form.submitting}
           />
-          <AddButton />
+          <AddButton submitting={form.submitting} />
         </form>
       </div>
     </div>
