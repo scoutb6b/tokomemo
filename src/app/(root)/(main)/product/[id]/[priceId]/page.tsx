@@ -1,12 +1,13 @@
 "use client";
 import { DeleteAnchor } from "@/app/_components/DeleteAnchor";
 import { EditSave } from "@/app/_components/EditSave";
+import { SkeltonBar } from "@/app/_components/Skelton/Bar";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { priceScheme } from "@/app/_libs/zod/schema";
 import { Price } from "@/app/_types/ApiResponse/Price";
 import { Store } from "@/app/_types/ApiResponse/Store";
-import { NativeSelect, TextInput } from "@mantine/core";
+import { Box, NativeSelect, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
@@ -54,7 +55,7 @@ const PriceIdPage: NextPage = () => {
   }
 
   if (isLoading) {
-    return <div>...読み込み中</div>;
+    return <SkeltonBar />;
   }
   const handleSave = async (
     _value: typeof form.values,
@@ -135,7 +136,8 @@ const PriceIdPage: NextPage = () => {
     });
   };
   return (
-    <div>
+    <Box>
+      <Title size="h2">価格編集</Title>
       <form onSubmit={form.onSubmit(handleSave)}>
         <NativeSelect
           size="md"
@@ -159,7 +161,7 @@ const PriceIdPage: NextPage = () => {
         <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelete} />
-    </div>
+    </Box>
   );
 };
 

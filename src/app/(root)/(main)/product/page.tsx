@@ -6,7 +6,6 @@ const ProductPage = () => {
   return (
     <Box mb={80}>
       <Tab />
-
       <AddIcon />
     </Box>
   );

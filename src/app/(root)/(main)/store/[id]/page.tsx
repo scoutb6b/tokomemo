@@ -2,11 +2,12 @@
 
 import { DeleteAnchor } from "@/app/_components/DeleteAnchor";
 import { EditSave } from "@/app/_components/EditSave";
+import { SkeltonBar } from "@/app/_components/Skelton/Bar";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { nameScheme } from "@/app/_libs/zod/schema";
 import { Store } from "@/app/_types/ApiResponse/Store";
-import { TextInput } from "@mantine/core";
+import { Box, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
@@ -117,11 +118,12 @@ const StoreIdPage: NextPage = () => {
     return <div>{error.message}</div>;
   }
   if (isLoading) {
-    return <div>読み込み中...</div>;
+    return <SkeltonBar />;
   }
 
   return (
-    <div>
+    <Box w="94%" mx="auto">
+      <Title size="h2">お店編集</Title>
       <form onSubmit={form.onSubmit(handleSave)}>
         <TextInput
           size="md"
@@ -135,7 +137,7 @@ const StoreIdPage: NextPage = () => {
         <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelete} />
-    </div>
+    </Box>
   );
 };
 

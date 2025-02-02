@@ -2,8 +2,10 @@
 
 import { BottomSheet } from "@/app/_components/BottomSheet";
 import { List } from "@/app/_components/LIst";
+import { SkeltonBar } from "@/app/_components/Skelton/Bar";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
+import { Box, Text, Title } from "@mantine/core";
 import { NextPage } from "next"; //page.tsxにつける型
 
 const pageData = {
@@ -23,25 +25,31 @@ const CategoryPage: NextPage = () => {
   if (error) {
     return <div>{error.message}</div>;
   }
-  if (isLoading) {
-    return <div>読み込み中...</div>;
-  }
-  if (cateogries?.length === 0) {
-    return <div>まだ登録がされていません。</div>;
-  }
 
   return (
-    <div>
-      <h1>{title}</h1>
-
-      <div>
-        {cateogries?.map((category) => {
-          return <List key={category.id} item={category} basePath={basePath} />;
-        })}
-      </div>
-
+    <Box>
+      <Title order={1} mb={20}>
+        {title}
+      </Title>
+      {!isLoading ? (
+        cateogries?.length === 0 ? (
+          <Text size="md" ta="center">
+            まだ登録されていません
+          </Text>
+        ) : (
+          <Box>
+            {cateogries?.map((category) => {
+              return (
+                <List key={category.id} item={category} basePath={basePath} />
+              );
+            })}
+          </Box>
+        )
+      ) : (
+        <SkeltonBar />
+      )}
       <BottomSheet mutate={mutate} title={title} basePath={basePath} />
-    </div>
+    </Box>
   );
 };
 
