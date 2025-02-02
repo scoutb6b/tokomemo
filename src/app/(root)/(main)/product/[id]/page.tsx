@@ -6,6 +6,7 @@ import { useFetch } from "@/app/_hooks/useFetch";
 import { Price } from "@/app/_types/ApiResponse/Price";
 import { BottomSheet } from "../_components/BottomSheet";
 import { ProductName } from "../_components/ProductName";
+import { Box } from "@mantine/core";
 
 const ProductListPage = () => {
   const path = usePathname();
@@ -15,13 +16,13 @@ const ProductListPage = () => {
   );
 
   return (
-    <div>
+    <Box>
       <ProductName path={path} />
-      <div>
+      <Box>
         <Table prices={data} err={error} isLoading={isLoading} />
-      </div>
+      </Box>
       <BottomSheet title="価格" basePath={path} mutate={mutate} />
-    </div>
+    </Box>
   );
 };
 

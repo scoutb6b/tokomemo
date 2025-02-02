@@ -1,4 +1,4 @@
-import { Card, NumberFormatter, Text } from "@mantine/core";
+import { Card, NumberFormatter, Text, Title } from "@mantine/core";
 import Link from "next/link";
 import c from "./index.module.css";
 import { ProductMin } from "@/app/_types/ApiResponse/Product";
@@ -10,10 +10,10 @@ type ProductProps = {
 export const CardParts = ({ item }: ProductProps) => {
   return (
     <Card component={Link} href={`product/${item.id}`} className={c.card}>
-      <Text fz="xl" ta="center" fw="bold">
+      <Title size={20} lineClamp={1} ta="center" fw="medium">
         {item.name}
-      </Text>
-      <Text fz={32} ta="right" fw="bold">
+      </Title>
+      <Text fz={30} ta="right" fw="medium">
         {item.price[0] ? (
           <NumberFormatter
             prefix="¥"

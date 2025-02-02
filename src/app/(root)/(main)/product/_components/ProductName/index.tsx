@@ -2,7 +2,7 @@
 
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Product } from "@/app/_types/ApiResponse/Product";
-import { Box, Flex, Skeleton, Title } from "@mantine/core";
+import { Flex, Skeleton, Title } from "@mantine/core";
 import { Dots } from "./Dots";
 
 type Props = {
