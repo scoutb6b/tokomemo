@@ -2,7 +2,7 @@
 
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Product } from "@/app/_types/ApiResponse/Product";
-import { Flex } from "@mantine/core";
+import { Box, Flex, Skeleton, Title } from "@mantine/core";
 import { Dots } from "./Dots";
 
 type Props = {
@@ -16,14 +16,20 @@ export const ProductName = ({ path }: Props) => {
   if (error) {
     return <div>{error.message}</div>;
   }
-  if (isLoading) {
-    return <div>読み込み中</div>;
-  }
 
   return (
-    <Flex justify="center" align="center" gap="md">
-      <h1>{data && data[0].name}</h1>
-      <Dots />
+    <Flex justify="center" align="center" gap="md" pb="xs">
+      {!isLoading ? (
+        <>
+          <Title size="h2">{data && data[0].name}</Title>
+          <Dots />
+        </>
+      ) : (
+        <>
+          <Skeleton height={40} width="70%" radius="xl" />
+          <Skeleton height={40} width="30%" radius="xl" />
+        </>
+      )}
     </Flex>
   );
 };

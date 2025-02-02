@@ -1,5 +1,5 @@
 "use client";
-import { NativeSelect, TextInput } from "@mantine/core";
+import { Box, NativeSelect, TextInput, Title } from "@mantine/core";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { FormEvent, useEffect } from "react";
@@ -14,6 +14,7 @@ import { modals } from "@mantine/modals";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { productScheme } from "@/app/_libs/zod/schema";
+import { SkeltonBar } from "@/app/_components/Skelton/Bar";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
@@ -129,35 +130,33 @@ const ProductIdEditPage: NextPage = () => {
     return <div>{error.message}</div>;
   }
   if (isLoading) {
-    return <div>読み込み中</div>;
+    return <SkeltonBar />;
   }
 
   return (
-    <div>
-      <h1>商品編集</h1>
-      <div>
-        <form onSubmit={form.onSubmit(handleEdit)}>
-          <TextInput
-            size="md"
-            radius="md"
-            label="商品名"
-            {...form.getInputProps("product")}
-            disabled={form.submitting}
-          />
-          <NativeSelect
-            size="md"
-            radius="md"
-            mt="lg"
-            label="カテゴリー"
-            {...form.getInputProps("categoryId")}
-            data={categorySelect}
-            disabled={form.submitting}
-          />
-          <EditSave submitting={form.submitting} />
-        </form>
-        <DeleteAnchor handleDelete={handleDelte} />
-      </div>
-    </div>
+    <Box>
+      <Title size="h2">商品編集</Title>
+      <form onSubmit={form.onSubmit(handleEdit)}>
+        <TextInput
+          size="md"
+          radius="md"
+          label="商品名"
+          {...form.getInputProps("product")}
+          disabled={form.submitting}
+        />
+        <NativeSelect
+          size="md"
+          radius="md"
+          mt="lg"
+          label="カテゴリー"
+          {...form.getInputProps("categoryId")}
+          data={categorySelect}
+          disabled={form.submitting}
+        />
+        <EditSave submitting={form.submitting} />
+      </form>
+      <DeleteAnchor handleDelete={handleDelte} />
+    </Box>
   );
 };
 

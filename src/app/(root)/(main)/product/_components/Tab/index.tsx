@@ -5,6 +5,7 @@ import { ProductMin } from "@/app/_types/ApiResponse/Product";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { CardParts } from "../CardParts";
 import c from "./index.module.css";
+import { SkeletonGrid } from "@/app/_components/Skelton/Grid";
 
 export const Tab = () => {
   const {
@@ -12,28 +13,15 @@ export const Tab = () => {
     error,
     isLoading,
   } = useFetch<ProductMin[]>("/api/product");
-  console.log(products);
 
-  const {
-    data: categories,
-    error: categoryErr,
-    isLoading: categoryLoading,
-  } = useFetch<Category[]>("/api/category");
+  const { data: categories, error: categoryError } =
+    useFetch<Category[]>("/api/category");
 
-  if (isLoading) {
-    return <div>...読み込み中</div>;
-  }
-  if (categoryLoading) {
-    return <div>...読み込み中</div>;
-  }
   if (error) {
     return <div>{error.message}</div>;
   }
-  if (categoryErr) {
-    return <div>{categoryErr.message}</div>;
-  }
-  if (products?.length === 0) {
-    return <div>まだ登録がされていません。</div>;
+  if (categoryError) {
+    return <div>{categoryError.message}</div>;
   }
 
   return (
@@ -50,15 +38,15 @@ export const Tab = () => {
       </Tabs.List>
 
       <Tabs.Panel value="all">
-        {/* {!products || products.length === 0 ? (
-        <div>なし！！！</div>
-      ) : ( */}
         <SimpleGrid cols={2} w={375} px={18}>
-          {products?.map((product) => (
-            <CardParts key={product.id} item={product} />
-          ))}
+          {!isLoading ? (
+            products?.map((product) => (
+              <CardParts key={product.id} item={product} />
+            ))
+          ) : (
+            <SkeletonGrid />
+          )}
         </SimpleGrid>
-        {/* )} */}
       </Tabs.Panel>
       {categories?.map((category) => (
         <Tabs.Panel value={category.id} key={category.id}>

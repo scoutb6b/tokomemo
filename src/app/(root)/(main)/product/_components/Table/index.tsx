@@ -1,5 +1,12 @@
 "use client";
-import { Text, Stack, Grid, GridCol, NumberFormatter } from "@mantine/core";
+import {
+  Text,
+  Stack,
+  Grid,
+  GridCol,
+  NumberFormatter,
+  Skeleton,
+} from "@mantine/core";
 import { IconChevronRight, IconCrown } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -31,30 +38,39 @@ export const Table = ({ prices, err, isLoading }: Props) => {
         </GridCol>
       </Grid>
       <Stack gap={0}>
-        {isLoading && <div>読み込み中。。。</div>}
-        {prices && prices?.length > 0 ? (
-          prices.map((price, i) => (
-            <Link href={`${path}/${price.id}`} key={price.id} className={c.row}>
-              <Grid>
-                <GridCol span={1} className={c.crown}>
-                  {i === 0 && <IconCrown color="#e6b422" />}
-                </GridCol>
-                <GridCol span={5}>
-                  <Text size="xl">{price.store.name}</Text>
-                </GridCol>
-                <GridCol span={5}>
-                  <Text size="xl">
-                    <NumberFormatter value={price.price} thousandSeparator />
-                  </Text>
-                </GridCol>
-                <GridCol span={1} className={c.arrow}>
-                  <IconChevronRight />
-                </GridCol>
-              </Grid>
-            </Link>
-          ))
+        {!isLoading ? (
+          prices?.length === 0 ? (
+            <Text size="md" ta="center">
+              まだ登録されていません
+            </Text>
+          ) : (
+            prices?.map((price, i) => (
+              <Link
+                href={`${path}/${price.id}`}
+                key={price.id}
+                className={c.row}
+              >
+                <Grid>
+                  <GridCol span={1} className={c.crown}>
+                    {i === 0 && <IconCrown color="#e6b422" />}
+                  </GridCol>
+                  <GridCol span={5}>
+                    <Text size="xl">{price.store.name}</Text>
+                  </GridCol>
+                  <GridCol span={5}>
+                    <Text size="xl">
+                      <NumberFormatter value={price.price} thousandSeparator />
+                    </Text>
+                  </GridCol>
+                  <GridCol span={1} className={c.arrow}>
+                    <IconChevronRight />
+                  </GridCol>
+                </Grid>
+              </Link>
+            ))
+          )
         ) : (
-          <div>この商品に、まだ価格は登録されていません</div>
+          <Skeleton />
         )}
       </Stack>
     </>
