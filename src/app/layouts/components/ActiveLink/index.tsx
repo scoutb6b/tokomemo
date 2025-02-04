@@ -12,8 +12,6 @@ type FooterProps = {
 };
 
 export const ActiveLink = (item: FooterProps) => {
-  console.log(item);
-
   const active = useActivePath(item.href);
 
   return (

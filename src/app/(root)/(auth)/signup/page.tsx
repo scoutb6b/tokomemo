@@ -2,10 +2,9 @@
 
 import { authSchema } from "@/app/_libs/zod/schema";
 import { createUser } from "./action";
-import { Button, Group, PasswordInput, TextInput } from "@mantine/core";
+import { Box, Button, Group, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
-import c from "./page.module.css";
 
 const SignUpPage = () => {
   const form = useForm({
@@ -32,7 +31,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className={c.form}>
+    <Box w="94%" mx="auto">
       <form onSubmit={handleSubmit}>
         <div>
           <TextInput
@@ -69,7 +68,7 @@ const SignUpPage = () => {
           </Button>
         </Group>
       </form>
-    </div>
+    </Box>
   );
 };
 

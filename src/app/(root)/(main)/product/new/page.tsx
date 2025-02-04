@@ -1,5 +1,5 @@
 "use client";
-import { NativeSelect, TextInput } from "@mantine/core";
+import { Box, NativeSelect, TextInput, Title } from "@mantine/core";
 import { AddButton } from "../_components/AddButton";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
@@ -82,9 +82,9 @@ const ProductNewPage: NextPage = () => {
   };
 
   return (
-    <div>
-      <h1>商品追加</h1>
-      <div>
+    <Box>
+      <Title size="h2">商品追加</Title>
+      <Box w="94%" mx="auto">
         <form onSubmit={form.onSubmit(clickCreate)}>
           <TextInput
             size="md"
@@ -105,8 +105,8 @@ const ProductNewPage: NextPage = () => {
           />
           <AddButton submitting={form.submitting} />
         </form>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
