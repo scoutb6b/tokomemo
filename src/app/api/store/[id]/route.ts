@@ -8,7 +8,6 @@ export const GET = async (
 ) => {
   const token = req.headers.get("Authorization") ?? "";
   const { data, error } = await supabase.auth.getUser(token);
-  console.log(token);
 
   if (error) {
     return NextResponse.json({ message: error.message }, { status: 400 });

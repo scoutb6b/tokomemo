@@ -70,7 +70,6 @@ const StoreIdPage: NextPage = () => {
       console.error(error);
     }
   };
-  console.log(form);
 
   const handleDelete = () => {
     if (!token) return;
