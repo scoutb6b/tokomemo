@@ -30,10 +30,10 @@ export const Table = ({ prices, err, isLoading }: Props) => {
     <>
       <Grid className={c.head}>
         <GridCol span={1} />
-        <GridCol span={5}>
+        <GridCol span={6}>
           <Text size="lg">お店</Text>
         </GridCol>
-        <GridCol span={6}>
+        <GridCol span={5}>
           <Text size="lg">値段</Text>
         </GridCol>
       </Grid>
@@ -54,10 +54,10 @@ export const Table = ({ prices, err, isLoading }: Props) => {
                   <GridCol span={1} className={c.crown}>
                     {i === 0 && <IconCrown color="#e6b422" />}
                   </GridCol>
-                  <GridCol span={5}>
+                  <GridCol span={6}>
                     <Text size="xl">{price.store.name}</Text>
                   </GridCol>
-                  <GridCol span={5}>
+                  <GridCol span={4}>
                     <Text size="xl">
                       <NumberFormatter value={price.price} thousandSeparator />
                     </Text>
