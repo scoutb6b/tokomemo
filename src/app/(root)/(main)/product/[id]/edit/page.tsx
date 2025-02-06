@@ -87,43 +87,13 @@ const ProductIdEditPage: NextPage = () => {
 
   const handleDelte = () => {
     if (!token) return;
-    modals.openConfirmModal({
-      title: "削除後に戻すことは出来ません",
-      centered: true,
-      labels: { confirm: "削除する", cancel: "キャンセルする" },
-      confirmProps: { color: "red" },
-      onCancel: () =>
-        notifications.show({
-          title: "キャンセルしました",
-          message: "",
-          autoClose: 1500,
-          position: "bottom-right",
-          color: "gray",
-        }),
-      onConfirm: async () => {
-        try {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product/${id}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token,
-              },
-            }
-          );
-          notifications.show({
-            title: "削除されました",
-            message: "",
-            autoClose: 2500,
-            position: "bottom-right",
-            color: "green",
-          });
-          router.push(`/product/${id}`);
-        } catch (error) {
-          console.error(error);
-        }
-      },
+    DeleteNotification({
+      endPoint: `api/product/${id}`,
+      token,
+      children: (
+        <Text size="sm">商品を削除しますと、価格一覧も全て削除されます</Text>
+      ),
+      onSuccessPush: () => router.push(`/product/${id}`),
     });
   };
   if (error) {
