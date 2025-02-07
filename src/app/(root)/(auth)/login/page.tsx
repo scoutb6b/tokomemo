@@ -1,7 +1,7 @@
 "use client";
 
 import { supabase } from "@/app/_libs/supabase";
-import { Button, Group, PasswordInput, TextInput } from "@mantine/core";
+import { Box, Button, Group, PasswordInput, TextInput } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -23,7 +23,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
+    <Box w="94%" mx="auto">
       <form onSubmit={handleSubmit}>
         <div>
           <TextInput
@@ -60,7 +60,7 @@ const LoginPage = () => {
           </Button>
         </Group>
       </form>
-    </div>
+    </Box>
   );
 };
 

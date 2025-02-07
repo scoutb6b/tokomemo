@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
   const token = req.headers.get("Authorization") ?? "";
-  console.log(token);
 
   const { data, error } = await supabase.auth.getUser(token);
 

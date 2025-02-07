@@ -1,16 +1,17 @@
 "use client";
-import { NativeSelect, TextInput } from "@mantine/core";
+import { Box, NativeSelect, TextInput, Title } from "@mantine/core";
 import { AddButton } from "../_components/AddButton";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { FormEvent } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
-import { notifications } from "@mantine/notifications";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { productScheme } from "@/app/_libs/zod/schema";
+import { ErrorNotification } from "@/app/_libs/notifications/error";
+import { SuccessNotification } from "@/app/_libs/notifications/success";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
@@ -62,29 +63,17 @@ const ProductNewPage: NextPage = () => {
         }
       );
       const createData = await res.json();
-      notifications.show({
-        title: "商品の登録が完了しました",
-        message: "",
-        autoClose: 2500,
-        position: "bottom-right",
-        color: "green",
-      });
+      SuccessNotification({ title: "商品が追加されました" });
       router.push(`/product/${createData.id}`);
     } catch (error) {
-      notifications.show({
-        title: "エラーが発生しました",
-        message: `${error}`,
-        autoClose: 2500,
-        position: "bottom-right",
-        color: "red",
-      });
+      ErrorNotification({ error });
     }
   };
 
   return (
-    <div>
-      <h1>商品追加</h1>
-      <div>
+    <Box>
+      <Title size="h2">商品追加</Title>
+      <Box w="94%" mx="auto">
         <form onSubmit={form.onSubmit(clickCreate)}>
           <TextInput
             size="md"
@@ -105,8 +94,8 @@ const ProductNewPage: NextPage = () => {
           />
           <AddButton submitting={form.submitting} />
         </form>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

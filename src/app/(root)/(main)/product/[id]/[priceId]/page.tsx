@@ -4,13 +4,14 @@ import { EditSave } from "@/app/_components/EditSave";
 import { SkeltonBar } from "@/app/_components/Skelton/Bar";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
+import { DeleteNotification } from "@/app/_libs/notifications/delete";
+import { ErrorNotification } from "@/app/_libs/notifications/error";
+import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { priceScheme } from "@/app/_libs/zod/schema";
 import { Price } from "@/app/_types/ApiResponse/Price";
 import { Store } from "@/app/_types/ApiResponse/Store";
 import { Box, NativeSelect, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { modals } from "@mantine/modals";
-import { notifications } from "@mantine/notifications";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -21,34 +22,30 @@ const PriceIdPage: NextPage = () => {
   const { token } = useSupabaseSession();
   const router = useRouter();
 
-  const {
-    data: amount,
-    error,
-    isLoading,
-  } = useFetch<Price[]>(`/api/product/${id}/price/${priceId}`);
+  const { data, error, isLoading } = useFetch<Price[]>(
+    `/api/product/${id}/price/${priceId}`
+  );
   const { data: stores } = useFetch<Store[]>("/api/store");
 
-  const form = useForm<{ storeId: string | null; price: number | null }>({
-    mode: "uncontrolled",
+  const form = useForm<{ storeId: string; price: number }>({
     initialValues: {
-      storeId: null,
-      price: null,
+      storeId: "",
+      price: 0,
     },
     validate: zodResolver(priceScheme),
   });
-
   const storeSelect = stores?.map((store) => {
     return { label: store.name, value: store.id };
   });
+
   useEffect(() => {
-    if (amount && amount.length > 0) {
-      form.setValues({
-        storeId: amount[0].store.id,
-        price: amount[0].price,
-      });
-    }
-  }, [amount]);
-  console.log(amount);
+    if (!data || !stores) return;
+
+    form.setValues({
+      storeId: data[0].store.id,
+      price: data[0].price,
+    });
+  }, [data, stores]);
 
   if (error) {
     return <div>{error.message}</div>;
@@ -80,59 +77,19 @@ const PriceIdPage: NextPage = () => {
           body: JSON.stringify({ storeId, price: Number(price) }),
         }
       );
-      notifications.show({
-        title: "保存されました",
-        message: "",
-        autoClose: 2500,
-        position: "bottom-right",
-        color: "green",
-      });
+      SuccessNotification({});
       router.push(`/product/${id}`);
     } catch (error) {
-      console.error(error);
+      ErrorNotification({ error });
     }
   };
 
   const handleDelete = () => {
     if (!token) return;
-    modals.openConfirmModal({
-      title: "削除後に戻すことは出来ません",
-      centered: true,
-      labels: { confirm: "削除する", cancel: "キャンセルする" },
-      confirmProps: { color: "red" },
-      onCancel: () =>
-        notifications.show({
-          title: "キャンセルしました",
-          message: "",
-          autoClose: 1500,
-          position: "bottom-right",
-          color: "gray",
-        }),
-      onConfirm: async () => {
-        try {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product/${id}/price/${priceId}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token,
-              },
-            }
-          );
-          notifications.show({
-            title: "完全に削除されました",
-            message: "",
-            autoClose: 2500,
-            position: "bottom-right",
-            color: "red",
-          });
-          router.push(`/product/${id}`);
-          // router.back();
-        } catch (error) {
-          console.error(error);
-        }
-      },
+    DeleteNotification({
+      endPoint: `api/product/${id}/price/${priceId}`,
+      token,
+      onSuccessPush: () => router.push(`/product/${id}`),
     });
   };
   return (
@@ -143,8 +100,10 @@ const PriceIdPage: NextPage = () => {
           size="md"
           radius="md"
           label="お店"
-          {...form.getInputProps("storeId")}
           data={storeSelect}
+          {...form.getInputProps("storeId")}
+          // value={form.getValues().storeId ?? ""}
+          // onChange={(e) => form.setFieldValue("storeId", e.currentTarget.value)}
           disabled={form.submitting}
         />
         <TextInput
@@ -155,9 +114,10 @@ const PriceIdPage: NextPage = () => {
           type="number"
           inputMode="numeric"
           {...form.getInputProps("price")}
+          // value={form.getValues().price ?? null}
+          // onChange={(e) => form.setFieldValue("price", e.currentTarget.value)}
           disabled={form.submitting}
         />
-
         <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelete} />

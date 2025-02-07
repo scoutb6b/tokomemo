@@ -1,5 +1,5 @@
 "use client";
-import { Box, NativeSelect, TextInput, Title } from "@mantine/core";
+import { Text, Box, NativeSelect, TextInput, Title } from "@mantine/core";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { FormEvent, useEffect } from "react";
@@ -8,13 +8,14 @@ import { NextPage } from "next";
 import { EditSave } from "@/app/_components/EditSave";
 import { useParams, useRouter } from "next/navigation";
 import { Product } from "@/app/_types/ApiResponse/Product";
-import { notifications } from "@mantine/notifications";
 import { DeleteAnchor } from "@/app/_components/DeleteAnchor";
-import { modals } from "@mantine/modals";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { productScheme } from "@/app/_libs/zod/schema";
 import { SkeltonBar } from "@/app/_components/Skelton/Bar";
+import { DeleteNotification } from "@/app/_libs/notifications/delete";
+import { ErrorNotification } from "@/app/_libs/notifications/error";
+import { SuccessNotification } from "@/app/_libs/notifications/success";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
@@ -35,7 +36,6 @@ const ProductIdEditPage: NextPage = () => {
     ...(categoryArr ?? []),
   ];
   const form = useForm({
-    mode: "uncontrolled",
     initialValues: {
       product: "",
       categoryId: "",
@@ -44,13 +44,12 @@ const ProductIdEditPage: NextPage = () => {
   });
 
   useEffect(() => {
-    if (data) {
-      form.setValues({
-        product: data[0].name,
-        categoryId: data[0].category?.id,
-      });
-    }
-  }, [data]);
+    if (!data || !cateogries) return;
+    form.setValues({
+      product: data[0].name,
+      categoryId: data[0].category?.id,
+    });
+  }, [data, cateogries]);
 
   const handleEdit = async (
     _value: typeof form.values,
@@ -63,6 +62,7 @@ const ProductIdEditPage: NextPage = () => {
       return;
     }
     const { product, categoryId } = form.getValues();
+
     try {
       await fetch(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product/${id}`, {
         method: "PUT",
@@ -72,58 +72,22 @@ const ProductIdEditPage: NextPage = () => {
         },
         body: JSON.stringify({ product, categoryId: categoryId || null }),
       });
-      notifications.show({
-        title: "保存されました",
-        message: "",
-        autoClose: 2500,
-        position: "bottom-right",
-        color: "green",
-      });
+      SuccessNotification({});
       router.push(`/product/${id}`);
     } catch (error) {
-      console.error(error);
+      ErrorNotification({ error });
     }
   };
 
   const handleDelte = () => {
     if (!token) return;
-    modals.openConfirmModal({
-      title: "削除後に戻すことは出来ません",
-      centered: true,
-      labels: { confirm: "削除する", cancel: "キャンセルする" },
-      confirmProps: { color: "red" },
-      onCancel: () =>
-        notifications.show({
-          title: "キャンセルしました",
-          message: "",
-          autoClose: 1500,
-          position: "bottom-right",
-          color: "gray",
-        }),
-      onConfirm: async () => {
-        try {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product/${id}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token,
-              },
-            }
-          );
-          notifications.show({
-            title: "削除されました",
-            message: "",
-            autoClose: 2500,
-            position: "bottom-right",
-            color: "green",
-          });
-          router.push(`/product/${id}`);
-        } catch (error) {
-          console.error(error);
-        }
-      },
+    DeleteNotification({
+      endPoint: `api/product/${id}`,
+      token,
+      children: (
+        <Text size="sm">商品を削除しますと、価格一覧も全て削除されます</Text>
+      ),
+      onSuccessPush: () => router.push(`/product/${id}`),
     });
   };
   if (error) {

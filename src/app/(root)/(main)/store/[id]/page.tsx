@@ -5,12 +5,13 @@ import { EditSave } from "@/app/_components/EditSave";
 import { SkeltonBar } from "@/app/_components/Skelton/Bar";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
+import { DeleteNotification } from "@/app/_libs/notifications/delete";
+import { ErrorNotification } from "@/app/_libs/notifications/error";
+import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { nameScheme } from "@/app/_libs/zod/schema";
 import { Store } from "@/app/_types/ApiResponse/Store";
 import { Box, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { modals } from "@mantine/modals";
-import { notifications } from "@mantine/notifications";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -59,58 +60,18 @@ const StoreIdPage: NextPage = () => {
         body: JSON.stringify(storeName),
       });
       router.push("/store");
-      notifications.show({
-        title: "保存されました",
-        message: "",
-        autoClose: 2500,
-        position: "bottom-right",
-        color: "green",
-      });
+      SuccessNotification({});
     } catch (error) {
-      console.error(error);
+      ErrorNotification({ error });
     }
   };
-  console.log(form);
 
   const handleDelete = () => {
     if (!token) return;
-    modals.openConfirmModal({
-      title: "削除後に戻すことは出来ません",
-      centered: true,
-      labels: { confirm: "削除する", cancel: "キャンセルする" },
-      confirmProps: { color: "red" },
-      onCancel: () =>
-        notifications.show({
-          title: "キャンセルしました",
-          message: "",
-          autoClose: 1500,
-          position: "bottom-right",
-          color: "gray",
-        }),
-      onConfirm: async () => {
-        try {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/store/${id}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token,
-              },
-            }
-          );
-          notifications.show({
-            title: "完全に削除されました",
-            message: "",
-            autoClose: 2500,
-            position: "bottom-right",
-            color: "red",
-          });
-          router.push("/store");
-        } catch (error) {
-          console.error(error);
-        }
-      },
+    DeleteNotification({
+      endPoint: `api/store/${id}`,
+      token,
+      onSuccessPush: () => router.push("/store"),
     });
   };
 

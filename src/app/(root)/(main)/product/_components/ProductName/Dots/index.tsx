@@ -1,4 +1,5 @@
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
+import { DeleteNotification } from "@/app/_libs/notifications/delete";
 import {
   ActionIcon,
   Menu,
@@ -7,8 +8,6 @@ import {
   MenuTarget,
   Text,
 } from "@mantine/core";
-import { modals } from "@mantine/modals";
-import { notifications } from "@mantine/notifications";
 import { IconDotsVertical, IconEdit, IconTrash } from "@tabler/icons-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -19,46 +18,13 @@ export const Dots = () => {
   const { id } = useParams();
   const handleDelte = () => {
     if (!token) return;
-    modals.openConfirmModal({
-      title: "削除後に戻すことは出来ません",
+    DeleteNotification({
+      endPoint: `api/product/${id}`,
+      token,
       children: (
         <Text size="sm">商品を削除しますと、価格一覧も全て削除されます</Text>
       ),
-      centered: true,
-      labels: { confirm: "削除する", cancel: "キャンセルする" },
-      confirmProps: { color: "red" },
-      onCancel: () =>
-        notifications.show({
-          title: "キャンセルしました",
-          message: "",
-          autoClose: 1500,
-          position: "bottom-right",
-          color: "gray",
-        }),
-      onConfirm: async () => {
-        try {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product/${id}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token,
-              },
-            }
-          );
-          notifications.show({
-            title: "完全に削除されました",
-            message: "",
-            autoClose: 2500,
-            position: "bottom-right",
-            color: "red",
-          });
-          router.push("/product");
-        } catch (error) {
-          console.error(error);
-        }
-      },
+      onSuccessPush: () => router.push("/product"),
     });
   };
 
