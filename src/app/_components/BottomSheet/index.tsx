@@ -10,6 +10,8 @@ import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { nameScheme } from "@/app/_libs/zod/schema";
+import { ErrorNotification } from "@/app/_libs/notifications/error";
+import { SuccessNotification } from "@/app/_libs/notifications/success";
 
 type titleProps = {
   title: string;
@@ -50,21 +52,11 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
       form.reset();
       setIsOpen(false);
       mutate();
-      notifications.show({
-        title: `${title}が新しく追加されました`,
-        message: "",
-        autoClose: 2500,
-        position: "bottom-right",
-        color: "green",
+      SuccessNotification({
+        title: `${title}が追加されました`,
       });
     } catch (error) {
-      notifications.show({
-        title: "エラーが発生しました",
-        message: `${error}`,
-        autoClose: 2500,
-        position: "bottom-right",
-        color: "red",
-      });
+      ErrorNotification({ error });
     }
   };
   console.log(title);

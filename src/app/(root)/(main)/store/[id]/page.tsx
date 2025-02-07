@@ -5,12 +5,13 @@ import { EditSave } from "@/app/_components/EditSave";
 import { SkeltonBar } from "@/app/_components/Skelton/Bar";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
+import { DeleteNotification } from "@/app/_libs/notifications/delete";
+import { ErrorNotification } from "@/app/_libs/notifications/error";
+import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { nameScheme } from "@/app/_libs/zod/schema";
 import { Store } from "@/app/_types/ApiResponse/Store";
 import { Box, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { modals } from "@mantine/modals";
-import { notifications } from "@mantine/notifications";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -59,15 +60,9 @@ const StoreIdPage: NextPage = () => {
         body: JSON.stringify(storeName),
       });
       router.push("/store");
-      notifications.show({
-        title: "保存されました",
-        message: "",
-        autoClose: 2500,
-        position: "bottom-right",
-        color: "green",
-      });
+      SuccessNotification({});
     } catch (error) {
-      console.error(error);
+      ErrorNotification({ error });
     }
   };
 

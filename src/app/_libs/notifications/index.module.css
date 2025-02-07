@@ -1,0 +1,63 @@
+.cancel {
+  background-color: var(--mantine-color-gray-6);
+  &::before {
+    background-color: var(--c-white);
+  }
+}
+.cancelTitle {
+  color: var(--c-white);
+}
+.cancelCloseBtn {
+  color: var(--c-white);
+  &:hover {
+    background-color: var(--mantine-color-gray-6);
+  }
+}
+
+.delete {
+  background-color: var(--mantine-color-red-6);
+  &::before {
+    background-color: var(--c-white);
+  }
+}
+.deleteTitle {
+  color: var(--c-white);
+}
+.deleteCloseBtn {
+  color: var(--c-white);
+  &:hover {
+    background-color: var(--mantine-color-red-6);
+  }
+}
+
+.success {
+  background-color: var(--mantine-color-green-6);
+  &::before {
+    background-color: var(--c-white);
+  }
+}
+.successTitle {
+  color: var(--c-white);
+}
+.successCloseBtn {
+  color: var(--c-white);
+  &:hover {
+    background-color: var(--mantine-color-green-6);
+  }
+}
+
+.error {
+  background-color: var(--mantine-color-red-6);
+  &::before {
+    background-color: var(--c-white);
+  }
+}
+.errorTitle {
+  color: var(--c-white);
+}
+.errorCloseBtn {
+  color: var(--c-white);
+  &:hover {
+    background-color: var(--mantine-color-red-6);
+  }
+}

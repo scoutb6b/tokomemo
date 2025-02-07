@@ -80,59 +80,19 @@ const PriceIdPage: NextPage = () => {
           body: JSON.stringify({ storeId, price: Number(price) }),
         }
       );
-      notifications.show({
-        title: "保存されました",
-        message: "",
-        autoClose: 2500,
-        position: "bottom-right",
-        color: "green",
-      });
+      SuccessNotification({});
       router.push(`/product/${id}`);
     } catch (error) {
-      console.error(error);
+      ErrorNotification({ error });
     }
   };
 
   const handleDelete = () => {
     if (!token) return;
-    modals.openConfirmModal({
-      title: "削除後に戻すことは出来ません",
-      centered: true,
-      labels: { confirm: "削除する", cancel: "キャンセルする" },
-      confirmProps: { color: "red" },
-      onCancel: () =>
-        notifications.show({
-          title: "キャンセルしました",
-          message: "",
-          autoClose: 1500,
-          position: "bottom-right",
-          color: "gray",
-        }),
-      onConfirm: async () => {
-        try {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product/${id}/price/${priceId}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: token,
-              },
-            }
-          );
-          notifications.show({
-            title: "完全に削除されました",
-            message: "",
-            autoClose: 2500,
-            position: "bottom-right",
-            color: "red",
-          });
-          router.push(`/product/${id}`);
-          // router.back();
-        } catch (error) {
-          console.error(error);
-        }
-      },
+    DeleteNotification({
+      endPoint: `api/product/${id}/price/${priceId}`,
+      token,
+      onSuccessPush: () => router.push(`/product/${id}`),
     });
   };
   return (

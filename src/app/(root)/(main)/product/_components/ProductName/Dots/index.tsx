@@ -1,4 +1,5 @@
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
+import { DeleteNotification } from "@/app/_libs/notifications/delete";
 import {
   ActionIcon,
   Menu,
@@ -7,8 +8,6 @@ import {
   MenuTarget,
   Text,
 } from "@mantine/core";
-import { modals } from "@mantine/modals";
-import { notifications } from "@mantine/notifications";
 import { IconDotsVertical, IconEdit, IconTrash } from "@tabler/icons-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";

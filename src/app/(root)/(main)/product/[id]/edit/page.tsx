@@ -72,16 +72,10 @@ const ProductIdEditPage: NextPage = () => {
         },
         body: JSON.stringify({ product, categoryId: categoryId || null }),
       });
-      notifications.show({
-        title: "保存されました",
-        message: "",
-        autoClose: 2500,
-        position: "bottom-right",
-        color: "green",
-      });
+      SuccessNotification({});
       router.push(`/product/${id}`);
     } catch (error) {
-      console.error(error);
+      ErrorNotification({ error });
     }
   };
 
