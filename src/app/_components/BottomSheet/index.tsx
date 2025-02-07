@@ -6,7 +6,6 @@ import { Drawer } from "vaul";
 import c from "./index.module.css";
 import { FormEvent, useState } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
-import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { nameScheme } from "@/app/_libs/zod/schema";
