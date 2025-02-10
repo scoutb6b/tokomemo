@@ -28,7 +28,7 @@ const CategoryPage: NextPage = () => {
 
   return (
     <Box>
-      <Title order={1} mb={20}>
+      <Title size="h2" mb={20}>
         {title}
       </Title>
       {!isLoading ? (

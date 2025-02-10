@@ -2,7 +2,14 @@
 
 import { authSchema } from "@/app/_libs/zod/schema";
 import { createUser } from "./action";
-import { Box, Button, Group, PasswordInput, TextInput } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Group,
+  PasswordInput,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 
@@ -32,29 +39,30 @@ const SignUpPage = () => {
 
   return (
     <Box w="94%" mx="auto">
+      <Title size="h2">新規登録</Title>
       <form onSubmit={handleSubmit}>
-        <div>
-          <TextInput
-            label="メールアドレス"
-            type="email"
-            name="email"
-            id="email"
-            required
-            {...form.getInputProps("mail")}
-            error={form.errors.mail}
-          />
-        </div>
-        <div>
-          <PasswordInput
-            label="パスワード"
-            type="password"
-            name="password"
-            id="password"
-            required
-            {...form.getInputProps("password")}
-            error={form.errors.password}
-          />
-        </div>
+        <TextInput
+          mt={20}
+          label="メールアドレス"
+          type="email"
+          name="email"
+          id="email"
+          required
+          {...form.getInputProps("mail")}
+          error={form.errors.mail}
+        />
+
+        <PasswordInput
+          mt={10}
+          label="パスワード"
+          type="password"
+          name="password"
+          id="password"
+          required
+          {...form.getInputProps("password")}
+          error={form.errors.password}
+        />
+
         <Group justify="center" mt="md">
           <Button
             type="submit"
