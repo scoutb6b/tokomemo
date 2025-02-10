@@ -47,12 +47,12 @@ const StorePage: NextPage = () => {
   } = useFetch<Store[]>("/api/store");
 
   if (error) {
-    return <div>err!!{error.message}</div>;
+    return <div>{error.message}</div>;
   }
 
   return (
     <Box>
-      <Title order={1} mb={20}>
+      <Title size="h2" mb={20}>
         {title}
       </Title>
       {!isLoading ? (
