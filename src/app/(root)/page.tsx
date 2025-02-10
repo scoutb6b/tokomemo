@@ -36,10 +36,13 @@ const TopLandingPage = () => {
   return (
     <Box className={c.home}>
       <Flex className={c.header} align="center" justify="space-between" px={10}>
-        <Title size={24} px={20} py={10} bg="white">
-          logo
-        </Title>
-        <Image />
+        <Image
+          src={null}
+          fallbackSrc="https://placehold.co/180x50?text=Placeholder"
+          w={180}
+          h={50}
+          alt=""
+        />
 
         <Button
           radius="xl"
@@ -138,6 +141,15 @@ const TopLandingPage = () => {
             </TimelineItem>
           </Timeline>
         </Box>
+        <Flex
+          justify="center"
+          className={c.contactBottom}
+          component={Link}
+          href="#"
+        >
+          <Text size="sm">お問い合わせ</Text>
+          <IconBrandInstagram size={20} />
+        </Flex>
 
         <Button
           component={Link}
