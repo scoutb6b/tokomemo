@@ -11,6 +11,8 @@ datasource db {
 model User {
   id String @id @default(uuid()) @db.Uuid
   supabaseUserid String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   store Store[]
   product Product[]
   category Category[]
@@ -20,6 +22,8 @@ model Store{
   name String
   userId String @db.Uuid @map("user_id") 
   user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   price Price[]
 }
 model Product{
@@ -28,8 +32,10 @@ model Product{
   userId String @db.Uuid @map("user_id")
   categoryId String? @db.Uuid @map("category_id")
   user User @relation(fields: [userId],references: [id],onDelete: Cascade)
-  price Price[]
   category Category? @relation(fields: [categoryId],references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  price Price[]
 }
 model Price{
   id String @id @default(uuid()) @db.Uuid
@@ -38,12 +44,15 @@ model Price{
   price Int
   store Store @relation(fields: [storeId],references: [id],onDelete: Cascade)
   product Product @relation(fields: [productId],references: [id],onDelete: Cascade)
-
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 model Category{
   id String @id @default(uuid()) @db.Uuid
   name String
   userId String @db.Uuid @map("user_id")
   user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   product Product[]
 }
