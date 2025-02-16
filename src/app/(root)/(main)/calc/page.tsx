@@ -86,7 +86,7 @@ const CalcPage: NextPage = () => {
           return state + btn;
         }
       case "dot":
-        let lastNum = state.split(/([\+\-x÷%])/).at(-1);
+        const lastNum = state.split(/([\+\-x÷%])/).at(-1);
         if (lastNum?.includes(".")) {
           return state;
         } else {
@@ -99,7 +99,7 @@ const CalcPage: NextPage = () => {
         return state.slice(0, -1);
       case "per":
         const pushPer = (formula: string) => {
-          let arr = formula.split(/([\+\-x÷%])/);
+          const arr = formula.split(/([\+\-x÷%])/);
           const i = arr.indexOf("%");
           arr.splice(i, 2, "÷", "100");
           return addSubtract(arr);
@@ -108,8 +108,8 @@ const CalcPage: NextPage = () => {
 
       case "peroff":
         const pushPeroff = (formula: string) => {
-          let tempFormula = formula.replace(/%off/, "&");
-          let arr = tempFormula.split(/([\+\-x÷%&])/);
+          const tempFormula = formula.replace(/%off/, "&");
+          const arr = tempFormula.split(/([\+\-x÷%&])/);
           const i = arr.indexOf("&");
           const num = parseFloat(arr[i - 1]);
           const offValue = (1 - num / 100).toString();
