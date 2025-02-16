@@ -69,6 +69,9 @@ export const GET = async (req: NextRequest) => {
       where: {
         userId: user.id,
       },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
 
     return NextResponse.json<Store[]>(data, { status: 200 });

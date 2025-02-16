@@ -58,6 +58,9 @@ export const GET = async (req: NextRequest) => {
           take: 1,
         },
       },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
     return NextResponse.json<ProductMin[]>(data);
   } catch (error) {
