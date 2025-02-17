@@ -6,17 +6,17 @@ import {
   IconListDetails,
 } from "@tabler/icons-react";
 import c from "./footer.module.css";
-import { ActiveLink } from "./components/ActiveLink";
+import { ActiveLink } from "./_components/ActiveLink";
 
 const links = [
-  { href: "/product", label: "商品", icon: <IconListDetails size={45} /> },
+  { href: "/products", label: "商品", icon: <IconListDetails size={45} /> },
   {
-    href: "/store",
+    href: "/stores",
     label: "お店",
     icon: <IconBuildingStore stroke={1.5} size={45} />,
   },
   {
-    href: "/category",
+    href: "/categories",
     label: "カテゴリー",
     icon: <IconIcons size={45} />,
   },

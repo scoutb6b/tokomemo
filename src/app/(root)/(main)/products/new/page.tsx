@@ -19,7 +19,7 @@ const ProductNewPage: NextPage = () => {
   const { token } = useSupabaseSession();
   const router = useRouter();
 
-  const { data: categories } = useFetch<Category[]>("/api/category");
+  const { data: categories } = useFetch<Category[]>("/api/categories");
 
   const categoryArr =
     categories && categories.length > 0
@@ -52,7 +52,7 @@ const ProductNewPage: NextPage = () => {
     const { product, categoryId } = form.getValues();
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product`,
+        `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/products`,
         {
           method: "POST",
           headers: {
@@ -64,7 +64,7 @@ const ProductNewPage: NextPage = () => {
       );
       const createData = await res.json();
       SuccessNotification({ title: "商品が追加されました" });
-      router.push(`/product/${createData.id}`);
+      router.push(`/products/${createData.id}`);
     } catch (error) {
       ErrorNotification({ error });
     }

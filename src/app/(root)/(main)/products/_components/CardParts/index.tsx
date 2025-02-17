@@ -9,7 +9,7 @@ type ProductProps = {
 
 export const CardParts = ({ item }: ProductProps) => {
   return (
-    <Card component={Link} href={`product/${item.id}`} className={c.card}>
+    <Card component={Link} href={`products/${item.id}`} className={c.card}>
       <Title size={20} lineClamp={1} ta="center" fw="medium">
         {item.name}
       </Title>

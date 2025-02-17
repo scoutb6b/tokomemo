@@ -12,10 +12,10 @@ export const Tab = () => {
     data: products,
     error,
     isLoading,
-  } = useFetch<ProductMin[]>("/api/product");
+  } = useFetch<ProductMin[]>("/api/products");
 
   const { data: categories, error: categoryError } =
-    useFetch<Category[]>("/api/category");
+    useFetch<Category[]>("/api/categories");
 
   if (error) {
     return <div>{error.message}</div>;

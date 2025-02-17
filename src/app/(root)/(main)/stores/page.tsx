@@ -10,7 +10,7 @@ import { NextPage } from "next"; //page.tsxにつける型
 
 const pageData = {
   title: "お店",
-  basePath: "store",
+  basePath: "stores",
 } as const;
 
 const StorePage: NextPage = () => {
@@ -44,7 +44,7 @@ const StorePage: NextPage = () => {
     error,
     isLoading,
     mutate,
-  } = useFetch<Store[]>("/api/store");
+  } = useFetch<Store[]>("/api/stores");
 
   if (error) {
     return <div>{error.message}</div>;
