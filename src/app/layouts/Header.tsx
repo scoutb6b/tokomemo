@@ -3,6 +3,7 @@ import { IconLogout } from "@tabler/icons-react";
 import { supabase } from "../_libs/supabase";
 import { useRouter } from "next/navigation";
 import c from "./header.module.css";
+import Link from "next/link";
 
 export function Header() {
   const router = useRouter();
@@ -14,13 +15,15 @@ export function Header() {
   return (
     <Flex justify="space-between" className={c.header}>
       <Box>
-        <Image
-          src={null}
-          fallbackSrc="https://placehold.co/200x40?text=Placeholder"
-          w={200}
-          h={40}
-          alt=""
-        ></Image>
+        <Link href="/">
+          <Image
+            src={null}
+            fallbackSrc="https://placehold.co/200x40?text=Placeholder"
+            w={200}
+            h={40}
+            alt=""
+          />
+        </Link>
       </Box>
       <Box>
         <ActionIcon
