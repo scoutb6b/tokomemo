@@ -10,7 +10,7 @@ import { NextPage } from "next"; //page.tsxにつける型
 
 const pageData = {
   title: "カテゴリー",
-  basePath: "category",
+  basePath: "categories",
 } as const;
 
 const CategoryPage: NextPage = () => {
@@ -20,7 +20,7 @@ const CategoryPage: NextPage = () => {
     error,
     isLoading,
     mutate,
-  } = useFetch<Category[]>("/api/category");
+  } = useFetch<Category[]>("/api/categories");
 
   if (error) {
     return <div>{error.message}</div>;

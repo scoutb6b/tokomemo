@@ -25,7 +25,7 @@ const LoginPage = () => {
     if (error) {
       alert("ログイン失敗");
     } else {
-      router.replace(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/product`);
+      router.replace(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/products`);
     }
   };
 

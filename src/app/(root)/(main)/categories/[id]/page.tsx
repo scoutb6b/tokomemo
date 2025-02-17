@@ -9,7 +9,7 @@ import { DeleteNotification } from "@/app/_libs/notifications/delete";
 import { ErrorNotification } from "@/app/_libs/notifications/error";
 import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { nameScheme } from "@/app/_libs/zod/schema";
-import { Store } from "@/app/_types/ApiResponse/Store";
+import { Category } from "@/app/_types/ApiResponse/Category";
 import { Box, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
@@ -17,12 +17,17 @@ import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useEffect } from "react";
 
-const StoreIdPage: NextPage = () => {
+const CategoryIdPage: NextPage = () => {
   const { id } = useParams();
   const { token } = useSupabaseSession();
   const router = useRouter();
 
-  const { data: store, error, isLoading } = useFetch<Store>(`/api/store/${id}`);
+  const {
+    data: cateogry,
+    error,
+    isLoading,
+  } = useFetch<Category>(`/api/categories/${id}`);
+
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -30,16 +35,18 @@ const StoreIdPage: NextPage = () => {
     },
     validate: zodResolver(nameScheme),
   });
+
   useEffect(() => {
-    if (store?.name) {
-      form.setValues({ name: store?.name });
+    if (cateogry?.name) {
+      form.setValues({ name: cateogry?.name });
     }
-  }, [store]);
+  }, [cateogry]);
 
   const handleSave = async (
     _value: typeof form.values,
     e: FormEvent<HTMLFormElement> | undefined
   ) => {
+    //typeof *** その型をコピーして持ってくる的な
     if (!token) return;
     e?.preventDefault();
     if (form.validate().hasErrors) {
@@ -47,20 +54,23 @@ const StoreIdPage: NextPage = () => {
       return;
     }
     const { name } = form.getValues();
-    const storeName = {
-      store: name,
+    const categoryName = {
+      category: name,
     };
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/store/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify(storeName),
-      });
-      router.push("/store");
+      await fetch(
+        `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/categories/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify(categoryName),
+        }
+      );
       SuccessNotification({});
+      router.push("/categories");
     } catch (error) {
       ErrorNotification({ error });
     }
@@ -69,9 +79,9 @@ const StoreIdPage: NextPage = () => {
   const handleDelete = () => {
     if (!token) return;
     DeleteNotification({
-      endPoint: `api/store/${id}`,
+      endPoint: `api/categories/${id}`,
       token,
-      onSuccessPush: () => router.push("/store"),
+      onSuccessPush: () => router.push("/categories"),
     });
   };
 
@@ -84,12 +94,12 @@ const StoreIdPage: NextPage = () => {
 
   return (
     <Box w="94%" mx="auto">
-      <Title size="h2">お店編集</Title>
+      <Title size="h2">カテゴリー編集</Title>
       <form onSubmit={form.onSubmit(handleSave)}>
         <TextInput
           size="md"
           radius="md"
-          label="お店"
+          label="カテゴリー"
           name="name"
           {...form.getInputProps("name")}
           disabled={form.submitting}
@@ -102,4 +112,4 @@ const StoreIdPage: NextPage = () => {
   );
 };
 
-export default StoreIdPage;
+export default CategoryIdPage;

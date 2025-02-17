@@ -24,8 +24,8 @@ const ProductIdEditPage: NextPage = () => {
   const { id } = useParams();
   const router = useRouter();
 
-  const { data: cateogries } = useFetch<Category[]>("/api/category");
-  const { data, error, isLoading } = useFetch<Product[]>(`/api/product/${id}`);
+  const { data: cateogries } = useFetch<Category[]>("/api/categories");
+  const { data, error, isLoading } = useFetch<Product[]>(`/api/products/${id}`);
 
   const categoryArr = cateogries?.map((category: CategorySelect) => {
     return { value: category.id, label: category.name };
@@ -64,16 +64,19 @@ const ProductIdEditPage: NextPage = () => {
     const { product, categoryId } = form.getValues();
 
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({ product, categoryId: categoryId || null }),
-      });
+      await fetch(
+        `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/products/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({ product, categoryId: categoryId || null }),
+        }
+      );
       SuccessNotification({});
-      router.push(`/product/${id}`);
+      router.push(`/products/${id}`);
     } catch (error) {
       ErrorNotification({ error });
     }
@@ -82,12 +85,12 @@ const ProductIdEditPage: NextPage = () => {
   const handleDelte = () => {
     if (!token) return;
     DeleteNotification({
-      endPoint: `api/product/${id}`,
+      endPoint: `api/products/${id}`,
       token,
       children: (
         <Text size="sm">商品を削除しますと、価格一覧も全て削除されます</Text>
       ),
-      onSuccessPush: () => router.push(`/product/${id}`),
+      onSuccessPush: () => router.push(`/products/${id}`),
     });
   };
   if (error) {

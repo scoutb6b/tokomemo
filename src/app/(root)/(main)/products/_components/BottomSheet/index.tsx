@@ -25,7 +25,7 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
   const { token } = useSupabaseSession();
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
 
-  const { data: stores } = useFetch<Store[]>("/api/store");
+  const { data: stores } = useFetch<Store[]>("/api/stores");
 
   const form = useForm({
     mode: "uncontrolled",

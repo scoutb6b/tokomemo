@@ -23,9 +23,9 @@ const PriceIdPage: NextPage = () => {
   const router = useRouter();
 
   const { data, error, isLoading } = useFetch<Price[]>(
-    `/api/product/${id}/price/${priceId}`
+    `/api/products/${id}/price/${priceId}`
   );
-  const { data: stores } = useFetch<Store[]>("/api/store");
+  const { data: stores } = useFetch<Store[]>("/api/stores");
 
   const form = useForm<{ storeId: string; price: number }>({
     initialValues: {
@@ -67,7 +67,7 @@ const PriceIdPage: NextPage = () => {
     const { storeId, price } = form.getValues();
     try {
       await fetch(
-        `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/product/${id}/price/${priceId}`,
+        `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/products/${id}/price/${priceId}`,
         {
           method: "PUT",
           headers: {
@@ -78,7 +78,7 @@ const PriceIdPage: NextPage = () => {
         }
       );
       SuccessNotification({});
-      router.push(`/product/${id}`);
+      router.push(`/products/${id}`);
     } catch (error) {
       ErrorNotification({ error });
     }
@@ -87,9 +87,9 @@ const PriceIdPage: NextPage = () => {
   const handleDelete = () => {
     if (!token) return;
     DeleteNotification({
-      endPoint: `api/product/${id}/price/${priceId}`,
+      endPoint: `api/products/${id}/price/${priceId}`,
       token,
-      onSuccessPush: () => router.push(`/product/${id}`),
+      onSuccessPush: () => router.push(`/products/${id}`),
     });
   };
   return (

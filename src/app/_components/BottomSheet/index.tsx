@@ -58,7 +58,6 @@ export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
       ErrorNotification({ error });
     }
   };
-  console.log(title);
   const { Root, Trigger, Description, Overlay, Portal, Content, Title } =
     Drawer;
 

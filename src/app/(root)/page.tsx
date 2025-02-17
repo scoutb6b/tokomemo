@@ -30,7 +30,7 @@ const TopLandingPage = () => {
       email: process.env.NEXT_PUBLIC_TEST_EMAIL!,
       password: process.env.NEXT_PUBLIC_TEST_PASS!,
     });
-    router.replace("/product");
+    router.replace("/products");
   };
 
   return (

@@ -19,12 +19,12 @@ export const Dots = () => {
   const handleDelte = () => {
     if (!token) return;
     DeleteNotification({
-      endPoint: `api/product/${id}`,
+      endPoint: `api/products/${id}`,
       token,
       children: (
         <Text size="sm">商品を削除しますと、価格一覧も全て削除されます</Text>
       ),
-      onSuccessPush: () => router.push("/product"),
+      onSuccessPush: () => router.push("/products"),
     });
   };
 
@@ -40,7 +40,7 @@ export const Dots = () => {
         <MenuItem
           leftSection={<IconEdit />}
           component={Link}
-          href={`/product/${id}/edit`}
+          href={`/products/${id}/edit`}
         >
           商品情報を編集する
         </MenuItem>
