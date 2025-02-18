@@ -40,7 +40,6 @@ const LoginPage = () => {
           type="email"
           name="email"
           id="email"
-          required
           onChange={(e) => setMail(e.target.value)}
           value={mail}
         />
@@ -51,7 +50,6 @@ const LoginPage = () => {
           type="password"
           name="password"
           id="password"
-          required
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
