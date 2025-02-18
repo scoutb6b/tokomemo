@@ -50,7 +50,7 @@ const SignUpPage = () => {
     } catch (error) {
       notifications.show({
         title: "登録できませんでした",
-        message: "",
+        message: `${error}`,
         autoClose: 10000,
         color: "red",
         position: "top-center",
