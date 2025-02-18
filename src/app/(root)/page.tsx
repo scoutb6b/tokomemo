@@ -22,7 +22,13 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../_libs/supabase";
+import { motion } from "motion/react";
 
+const scrollVariant = {
+  from: { opacity: 0, y: 50 },
+  to: { opacity: 1, y: 0 },
+  transition: { delay: 1, duration: 0.8, ease: "easeIn" },
+};
 const TopLandingPage = () => {
   const router = useRouter();
   const handleTestLogin = async () => {
@@ -35,27 +41,34 @@ const TopLandingPage = () => {
 
   return (
     <Box className={c.home}>
-      <Flex className={c.header} align="center" justify="space-between" px={10}>
-        <Image
-          src={null}
-          fallbackSrc="https://placehold.co/180x50?text=Placeholder"
-          w={180}
-          h={50}
-          alt=""
-        />
-
-        <Button
-          radius="xl"
-          size="md"
-          variant="outline"
-          color="rgba(255,146,43,1)"
-          bg="white"
-          component={Link}
-          href="/login"
+      <header>
+        <Flex
+          className={c.header}
+          align="center"
+          justify="space-between"
+          px={10}
         >
-          ログイン
-        </Button>
-      </Flex>
+          <Image
+            src={null}
+            fallbackSrc="https://placehold.co/180x50?text=Placeholder"
+            w={180}
+            h={50}
+            alt=""
+          />
+
+          <Button
+            radius="xl"
+            size="md"
+            variant="outline"
+            color="rgba(255,146,43,1)"
+            bg="white"
+            component={Link}
+            href="/login"
+          >
+            ログイン
+          </Button>
+        </Flex>
+      </header>
       <main className={c.main}>
         <Title size={28}>複数店舗の価格をサッと比較するアプリ</Title>
         <Image
@@ -74,40 +87,52 @@ const TopLandingPage = () => {
             いつでもどこでも他店の価格をチェックして、賢いお買い物をサポートします！
           </Text>
         </Box>
-        <Stack gap="lg" mt={30}>
-          <Button
-            type="button"
-            variant="outline"
-            bg="white"
-            size="lg"
-            radius="md"
-            onClick={handleTestLogin}
-          >
-            ゲストでログイン
-          </Button>
-          <Button
-            variant="filled"
-            color="rgba(255,146,43,1)"
-            size="lg"
-            radius="md"
-            component={Link}
-            href="/signup"
-          >
-            新規登録
-          </Button>
-          <Button
-            variant="outline"
-            color="rgba(255,146,43,1)"
-            bg="white"
-            size="lg"
-            radius="md"
-            component={Link}
-            href="/login"
-          >
-            ログイン
-          </Button>
-        </Stack>
-        <Box>
+        <motion.div
+          viewport={{ once: true }}
+          variants={scrollVariant}
+          initial="from"
+          whileInView="to"
+        >
+          <Stack gap="lg" mt={30}>
+            <Button
+              type="button"
+              variant="outline"
+              bg="white"
+              size="lg"
+              radius="md"
+              onClick={handleTestLogin}
+            >
+              ゲストでログイン
+            </Button>
+            <Button
+              variant="filled"
+              color="rgba(255,146,43,1)"
+              size="lg"
+              radius="md"
+              component={Link}
+              href="/signup"
+            >
+              新規登録
+            </Button>
+            <Button
+              variant="outline"
+              color="rgba(255,146,43,1)"
+              bg="white"
+              size="lg"
+              radius="md"
+              component={Link}
+              href="/login"
+            >
+              ログイン
+            </Button>
+          </Stack>
+        </motion.div>
+        <motion.div
+          viewport={{ once: true }}
+          variants={scrollVariant}
+          initial="from"
+          whileInView="to"
+        >
           <Title order={3} mt={40} mb={20}>
             使い方
           </Title>
@@ -140,16 +165,40 @@ const TopLandingPage = () => {
               </Text>
             </TimelineItem>
           </Timeline>
-        </Box>
-        <Flex
-          justify="center"
-          className={c.contactBottom}
-          component={Link}
-          href="#"
+        </motion.div>
+        <motion.div
+          viewport={{ once: true }}
+          variants={scrollVariant}
+          initial="from"
+          whileInView="to"
         >
-          <Text size="sm">お問い合わせ</Text>
-          <IconBrandInstagram size={20} />
-        </Flex>
+          <Stack mt={30} gap={10}>
+            <Text size="sm" ta="center" fw={700}>
+              ＼まずはゲストユーザーで試してみる！／
+            </Text>
+            <Button
+              type="button"
+              variant="outline"
+              bg="white"
+              size="lg"
+              radius="md"
+              onClick={handleTestLogin}
+            >
+              ゲストでログイン
+            </Button>
+          </Stack>
+        </motion.div>
+        <motion.div>
+          <Flex
+            justify="center"
+            className={c.contactBottom}
+            component={Link}
+            href="#"
+          >
+            <Text size="sm">お問い合わせ</Text>
+            <IconBrandInstagram size={20} />
+          </Flex>
+        </motion.div>
 
         <Button
           component={Link}
