@@ -16,13 +16,7 @@ export function Header() {
     <Flex justify="space-between" className={c.header}>
       <Box>
         <Link href="/">
-          <Image
-            src={null}
-            fallbackSrc="https://placehold.co/200x40?text=Placeholder"
-            w={200}
-            h={40}
-            alt=""
-          />
+          <Image src="/logo.svg" w={200} h={40} alt="logo" />
         </Link>
       </Box>
       <Box>

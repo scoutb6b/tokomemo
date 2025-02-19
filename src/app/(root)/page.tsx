@@ -10,15 +10,18 @@ import {
   Image,
   Timeline,
   TimelineItem,
+  Blockquote,
 } from "@mantine/core";
 import Link from "next/link";
 import c from "./page.module.css";
 import NextImage from "next/image";
 import {
   IconBrandInstagram,
+  IconDotsVertical,
   IconNumber1,
   IconNumber2,
   IconNumber3,
+  IconUpload,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../_libs/supabase";
@@ -48,13 +51,7 @@ const TopLandingPage = () => {
           justify="space-between"
           px={10}
         >
-          <Image
-            src={null}
-            fallbackSrc="https://placehold.co/180x50?text=Placeholder"
-            w={180}
-            h={50}
-            alt=""
-          />
+          <Image src="/logo.svg" w={200} h={40} alt="logo" />
 
           <Button
             radius="xl"
@@ -133,7 +130,7 @@ const TopLandingPage = () => {
           initial="from"
           whileInView="to"
         >
-          <Title order={3} mt={40} mb={20}>
+          <Title order={2} mt={40} mb={20}>
             使い方
           </Title>
           <Timeline active={4} bulletSize={24} lineWidth={2}>
@@ -188,7 +185,45 @@ const TopLandingPage = () => {
             </Button>
           </Stack>
         </motion.div>
-        <motion.div>
+        <motion.div
+          viewport={{ once: true }}
+          variants={scrollVariant}
+          initial="from"
+          whileInView="to"
+        >
+          <Title order={2} mt={40} mb={20}>
+            ホーム画面への登録
+          </Title>
+          <Text size="sm">
+            よく使う場合は、 ホーム画面に登録しておくと便利です！
+          </Text>
+
+          <Box mt={24}>
+            <Blockquote icon={<IconNumber1 />} color="#9d5554">
+              <Text size="md">
+                ブラウザの右上や下にある
+                <IconUpload size={16} />
+                や、
+                <IconDotsVertical size={16} />
+                のマークをクリック
+              </Text>
+            </Blockquote>
+
+            <Blockquote icon={<IconNumber2 />} color="#9d5554">
+              <Text size="md">ホーム画面に追加をクリック</Text>
+            </Blockquote>
+
+            <Blockquote icon={<IconNumber3 />} color="#9d5554">
+              <Text size="md">追加するをクリック</Text>
+            </Blockquote>
+          </Box>
+        </motion.div>
+        <motion.div
+          viewport={{ once: true }}
+          variants={scrollVariant}
+          initial="from"
+          whileInView="to"
+        >
           <Flex
             justify="center"
             className={c.contactBottom}
