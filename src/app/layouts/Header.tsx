@@ -1,3 +1,4 @@
+"use client";
 import { ActionIcon, Box, Flex, Image } from "@mantine/core";
 import { IconLogout } from "@tabler/icons-react";
 import { supabase } from "../_libs/supabase";
