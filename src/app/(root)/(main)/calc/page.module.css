@@ -1,7 +1,7 @@
 .main {
   background: var(--mantine-color-gray-2);
-  height: 100vh;
-  padding-top: 50px;
+  height: 100%;
+  padding: 20px 0;
   .grid {
     width: 94%;
     margin: 0 auto;

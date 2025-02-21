@@ -6,7 +6,6 @@ import { Header } from "./Header";
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className={c.mainLayout}>
-      <Header />
       <main>{children}</main>
       <Footer />
     </div>
