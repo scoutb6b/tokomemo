@@ -6,14 +6,19 @@ import type { ReactNode } from "react";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import { ModalsProvider } from "@mantine/modals";
+import { Murecho } from "next/font/google";
 
 export const metadata: Metadata = {
   title: "tokomemo",
   description: "自分だけの複数店舗での価格を比較するアプリ",
 };
+const murecho = Murecho({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
 
 const theme = createTheme({
-  fontFamily: "Murecho",
+  fontFamily: `${murecho.style.fontFamily},Zen Kaku Gothic Antique,Noto Sans JP,sans-serif`,
 
   headings: {
     sizes: {
