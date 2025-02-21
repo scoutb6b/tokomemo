@@ -8,7 +8,7 @@ export const createUser = async (mail: string, password: string) => {
     email: mail,
     password,
     options: {
-      emailRedirectTo: `{process.env.API_URL}/login`,
+      emailRedirectTo: `{process.env.NEXT_PUBLIC_APP_BASE_URL}/login`,
     },
   });
   if (error) {
