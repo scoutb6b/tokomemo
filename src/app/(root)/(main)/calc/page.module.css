@@ -1,6 +1,6 @@
 .main {
   background: var(--mantine-color-gray-2);
-  height: 100%;
+  height: calc(100vh - 100px);
   padding: 20px 0;
   .grid {
     width: 94%;
@@ -14,7 +14,7 @@
   border-radius: 10px;
   background: var(--c-white);
   padding: 10px 20px;
-  margin: 0 10px 32px auto;
+  margin: 0 10px 20px auto;
 }
 .btn {
   border-radius: 999px;
@@ -26,13 +26,13 @@
     opacity: 0.7;
   }
 }
-.abc {
+.other {
   background: var(--mantine-color-gray-5);
   &:hover {
     background: var(--mantine-color-gray-5);
   }
 }
-.def {
+.operations {
   background: var(--mantine-color-orange-5);
   &:hover {
     background: var(--mantine-color-orange-5);

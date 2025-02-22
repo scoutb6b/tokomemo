@@ -35,6 +35,7 @@ const LoginPage = () => {
         <Title size="h2">ログイン</Title>
 
         <TextInput
+          size="md"
           mt={20}
           label="メールアドレス"
           type="email"
@@ -45,6 +46,7 @@ const LoginPage = () => {
         />
 
         <PasswordInput
+          size="md"
           mt={10}
           label="パスワード"
           type="password"
