@@ -168,8 +168,8 @@ const CalcPage: NextPage = () => {
                 variant="subtle"
                 onClick={() => handleClick(btn)}
                 className={clsx(c.btn, {
-                  [c.abc]: ["del", "AC", ".", "%", "%off"].includes(btn),
-                  [c.def]: ["+", "-", "x", "÷", "="].includes(btn),
+                  [c.other]: ["del", "AC", ".", "%", "%off"].includes(btn),
+                  [c.operations]: ["+", "-", "x", "÷", "="].includes(btn),
                   [c.number]: ![
                     "del",
                     "AC",
@@ -184,7 +184,7 @@ const CalcPage: NextPage = () => {
                   ].includes(btn),
                 })}
               >
-                <Text size={btn === "%off" ? "sm" : "xl"} fw={700}>
+                <Text size={btn === "%off" ? "sm" : "xl"} fw={900}>
                   {btn}
                 </Text>
               </Button>

@@ -42,7 +42,7 @@ const SignUpPage = () => {
       notifications.show({
         title: "メールが送信されましたので、ご確認ください",
         message: "右のXボタンにて閉じてください。",
-        autoClose: false,
+        autoClose: 10000,
         color: "green",
         position: "top-center",
       });
@@ -63,6 +63,7 @@ const SignUpPage = () => {
       <Title size="h2">新規登録</Title>
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput
+          size="md"
           mt={20}
           label="メールアドレス"
           type="email"
@@ -74,6 +75,7 @@ const SignUpPage = () => {
         />
 
         <PasswordInput
+          size="md"
           mt={10}
           label="パスワード"
           type="password"
