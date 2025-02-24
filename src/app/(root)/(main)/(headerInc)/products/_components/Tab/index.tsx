@@ -40,9 +40,13 @@ export const Tab = () => {
       <Tabs.Panel value="all">
         <SimpleGrid cols={2} w={375} px={18}>
           {!isLoading ? (
-            products?.map((product) => (
-              <CardParts key={product.id} item={product} />
-            ))
+            products && products?.length > 0 ? (
+              products?.map((product) => (
+                <CardParts key={product.id} item={product} />
+              ))
+            ) : (
+              <Text size="md">まだ商品がありません</Text>
+            )
           ) : (
             <SkeletonGrid />
           )}
