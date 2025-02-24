@@ -1,13 +1,16 @@
 "use client";
 
 import useSWR from "swr";
-import { useSupabaseSession } from "./useSupabaseSession";
+import { supabase } from "../_libs/supabase";
 
 export const useFetch = <T>(path: string) => {
   const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL;
-  const { token } = useSupabaseSession();
 
   const fetcher = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const token = session?.access_token;
     if (!token) return;
 
     const res = await fetch(`${baseUrl}${path}`, {
@@ -26,6 +29,6 @@ export const useFetch = <T>(path: string) => {
     const data: T = await res.json();
     return data;
   };
-  const results = useSWR(token ? `${baseUrl}${path}` : null, fetcher);
+  const results = useSWR(`${baseUrl}${path}`, fetcher);
   return results;
 };
