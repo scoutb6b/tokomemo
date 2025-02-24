@@ -4,7 +4,7 @@ npm run dev
 ```
 
 # 使用技術
----
+
 ## フロントエンド
 - 言語：TypeScript
 - フレームワーク：Next,js 15
@@ -18,15 +18,16 @@ npm run dev
 - ORM：Prisma
 - 認証：Supabase Auth
 
-## 主要ライブラリ
-- バリデーション：zod
-- ボトムシート：vaul
-- アニメーション：mutation
+
 
 # データベース設計
-Miro
+Miro  
 [https://miro.com/app/board/uXjVLSRaj2g=/?share_link_id=768708459299](https://miro.com/app/board/uXjVLSRaj2g=/?share_link_id=768708459299)
 
 # デザインカンプ
-figma
+figma  
 [https://www.figma.com/design/xcYAvtl8l2cjjAKOwC9sEo/memoWalk?node-id=0-1&t=MNdlarKXLza5H7xS-1](https://www.figma.com/design/xcYAvtl8l2cjjAKOwC9sEo/memoWalk?node-id=0-1&t=MNdlarKXLza5H7xS-1)
+
+## 今後実装したい機能
+- 価格入力時にメモを残したい
+- 価格入力時の日付を表示
