@@ -228,7 +228,7 @@ const TopLandingPage = () => {
             justify="center"
             className={c.contactBottom}
             component={Link}
-            href="#"
+            href="https://www.instagram.com/kubo_0930/"
           >
             <Text size="sm">お問い合わせ</Text>
             <IconBrandInstagram size={20} />
@@ -237,7 +237,7 @@ const TopLandingPage = () => {
 
         <Button
           component={Link}
-          href={"#"}
+          href={"https://www.instagram.com/kubo_0930/"}
           variant="white"
           className={c.instaIcon}
         >
