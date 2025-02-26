@@ -7,7 +7,7 @@ type ProductProps = {
   item: Omit<ProductMin, "category">;
 };
 
-export const CardParts = ({ item }: ProductProps) => {
+export const CardParts: React.FC<ProductProps> = ({ item }) => {
   return (
     <Card component={Link} href={`products/${item.id}`} className={c.card}>
       <Title size={20} lineClamp={1} ta="center" fw="medium">

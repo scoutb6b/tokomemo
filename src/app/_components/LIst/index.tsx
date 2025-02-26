@@ -9,7 +9,7 @@ type itemProps = {
   basePath: string;
 };
 
-export const List = ({ item, basePath }: itemProps) => {
+export const List: React.FC<itemProps> = ({ item, basePath }) => {
   return (
     <Paper component={Link} href={`/${basePath}/${item.id}`} className={c.list}>
       <Flex justify="space-between" align="center">

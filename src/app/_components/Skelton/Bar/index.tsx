@@ -1,6 +1,6 @@
 import { Group, Skeleton } from "@mantine/core";
 
-export const SkeltonBar = () => {
+export const SkeltonBar: React.FC = () => {
   return (
     <Group>
       <Skeleton height={40} radius="xl" mt={10} />
