@@ -9,6 +9,8 @@ type PriceStoreBody = {
   price: number;
 };
 
+type PriceList = Omit<Price, "updatedAt">;
+
 export const POST = async (
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -97,7 +99,7 @@ export const GET = async (
         price: "asc",
       },
     });
-    return NextResponse.json<Price[]>(data);
+    return NextResponse.json<PriceList[]>(data);
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 401 });
