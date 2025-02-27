@@ -4,7 +4,7 @@ import { Button } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
-export const BackButton = () => {
+export const BackButton: React.FC = () => {
   const router = useRouter();
   return (
     <Button

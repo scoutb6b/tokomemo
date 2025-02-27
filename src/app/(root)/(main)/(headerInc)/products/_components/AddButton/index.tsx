@@ -7,7 +7,7 @@ type Props = {
   submitting: boolean;
 };
 
-export const AddButton = ({ submitting }: Props) => {
+export const AddButton: React.FC<Props> = ({ submitting }) => {
   return (
     <Button
       type="submit"

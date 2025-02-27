@@ -19,7 +19,7 @@ type Props = {
   isLoading: boolean;
 };
 
-export const Table = ({ prices, err, isLoading }: Props) => {
+export const Table: React.FC<Props> = ({ prices, err, isLoading }) => {
   const path = usePathname();
 
   if (err) {

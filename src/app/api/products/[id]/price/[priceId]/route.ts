@@ -7,6 +7,7 @@ type PriceBody = {
   storeId: string;
   price: number;
 };
+
 export const GET = async (
   req: NextRequest,
   { params }: { params: Promise<{ priceId: string }> }
@@ -48,6 +49,7 @@ export const GET = async (
             name: true,
           },
         },
+        updatedAt: true,
       },
     });
     return NextResponse.json<Price[]>(data);

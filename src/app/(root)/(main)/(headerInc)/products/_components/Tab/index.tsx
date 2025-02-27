@@ -7,7 +7,7 @@ import { CardParts } from "../CardParts";
 import c from "./index.module.css";
 import { SkeletonGrid } from "@/app/_components/Skelton/Grid";
 
-export const Tab = () => {
+export const Tab: React.FC = () => {
   const {
     data: products,
     error,

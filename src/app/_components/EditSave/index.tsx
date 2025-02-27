@@ -5,7 +5,7 @@ type Props = {
   submitting: boolean;
 };
 
-export const EditSave = ({ submitting }: Props) => {
+export const EditSave: React.FC<Props> = ({ submitting }) => {
   return (
     <Button
       type="submit"

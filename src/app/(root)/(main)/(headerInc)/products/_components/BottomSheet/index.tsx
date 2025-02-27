@@ -21,7 +21,11 @@ type titleProps = {
 };
 type StoreSelect = Pick<Store, "id" | "name">;
 
-export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
+export const BottomSheet: React.FC<titleProps> = ({
+  title,
+  basePath,
+  mutate,
+}) => {
   const { token } = useSupabaseSession();
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
 

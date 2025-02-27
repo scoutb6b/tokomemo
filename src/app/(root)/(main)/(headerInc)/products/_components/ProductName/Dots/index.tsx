@@ -12,7 +12,7 @@ import { IconDotsVertical, IconEdit, IconTrash } from "@tabler/icons-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
-export const Dots = () => {
+export const Dots: React.FC = () => {
   const { token } = useSupabaseSession();
   const router = useRouter();
   const { id } = useParams();

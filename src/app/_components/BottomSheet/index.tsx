@@ -18,7 +18,11 @@ type titleProps = {
   mutate: () => void;
 };
 
-export const BottomSheet = ({ title, basePath, mutate }: titleProps) => {
+export const BottomSheet: React.FC<titleProps> = ({
+  title,
+  basePath,
+  mutate,
+}) => {
   const { token } = useSupabaseSession();
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
   const form = useForm({

@@ -10,21 +10,23 @@ import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { priceScheme } from "@/app/_libs/zod/schema";
 import { Price } from "@/app/_types/ApiResponse/Price";
 import { Store } from "@/app/_types/ApiResponse/Store";
-import { Box, NativeSelect, TextInput, Title } from "@mantine/core";
+import { Box, NativeSelect, TextInput, Title, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 const PriceIdPage: NextPage = () => {
   const { id, priceId } = useParams();
   const { token } = useSupabaseSession();
   const router = useRouter();
+  const [updatedDate, setUpdatedDate] = useState<string | undefined>("");
 
   const { data, error, isLoading } = useFetch<Price[]>(
     `/api/products/${id}/price/${priceId}`
   );
+
   const { data: stores } = useFetch<Store[]>("/api/stores");
 
   const form = useForm<{ storeId: string; price: number }>({
@@ -40,11 +42,13 @@ const PriceIdPage: NextPage = () => {
 
   useEffect(() => {
     if (!data || !stores) return;
-
     form.setValues({
       storeId: data[0].store.id,
       price: data[0].price,
     });
+    if (data && data.length > 0) {
+      setUpdatedDate(new Date(data[0].updatedAt).toISOString().split("T")[0]);
+    }
   }, [data, stores]);
 
   if (error) {
@@ -118,6 +122,9 @@ const PriceIdPage: NextPage = () => {
           // onChange={(e) => form.setFieldValue("price", e.currentTarget.value)}
           disabled={form.submitting}
         />
+        <Text size="sm" ta="right" c="gray">
+          最終更新日: {updatedDate}
+        </Text>
         <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelete} />

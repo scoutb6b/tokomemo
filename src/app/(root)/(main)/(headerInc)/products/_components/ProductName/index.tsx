@@ -11,7 +11,7 @@ type Props = {
 
 type ProductName = Pick<Product, "name">;
 
-export const ProductName = ({ path }: Props) => {
+export const ProductName: React.FC<Props> = ({ path }) => {
   const { data, error, isLoading } = useFetch<ProductName[]>(`/api/${path}`);
   if (error) {
     return <div>{error.message}</div>;
