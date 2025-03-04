@@ -1,5 +1,5 @@
 "use client";
-import { Text, Box, NativeSelect, TextInput, Title } from "@mantine/core";
+import { Text, Box, TextInput, Title } from "@mantine/core";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { FormEvent, useEffect } from "react";
@@ -16,6 +16,7 @@ import { SkeltonBar } from "@/app/_components/Skelton/Bar";
 import { DeleteNotification } from "@/app/_libs/notifications/delete";
 import { ErrorNotification } from "@/app/_libs/notifications/error";
 import { SuccessNotification } from "@/app/_libs/notifications/success";
+import { CategorySelect } from "../../_components/CategorySelect";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
@@ -24,17 +25,8 @@ const ProductIdEditPage: NextPage = () => {
   const { id } = useParams();
   const router = useRouter();
 
-  const { data: cateogries } = useFetch<Category[]>("/api/categories");
   const { data, error, isLoading } = useFetch<Product[]>(`/api/products/${id}`);
 
-  const categoryArr = cateogries?.map((category: CategorySelect) => {
-    return { value: category.id, label: category.name };
-  });
-
-  const categorySelect = [
-    { value: "", label: "カテゴリなし" },
-    ...(categoryArr ?? []),
-  ];
   const form = useForm({
     initialValues: {
       product: "",
@@ -44,12 +36,12 @@ const ProductIdEditPage: NextPage = () => {
   });
 
   useEffect(() => {
-    if (!data || !cateogries) return;
+    if (!data) return;
     form.setValues({
       product: data[0].name,
       categoryId: data[0].category?.id,
     });
-  }, [data, cateogries]);
+  }, [data]);
 
   const handleEdit = async (
     _value: typeof form.values,
@@ -90,7 +82,7 @@ const ProductIdEditPage: NextPage = () => {
       children: (
         <Text size="sm">商品を削除しますと、価格一覧も全て削除されます</Text>
       ),
-      onSuccessPush: () => router.push(`/products/${id}`),
+      onSuccessPush: () => router.push("/products"),
     });
   };
   if (error) {
@@ -111,15 +103,7 @@ const ProductIdEditPage: NextPage = () => {
           {...form.getInputProps("product")}
           disabled={form.submitting}
         />
-        <NativeSelect
-          size="md"
-          radius="md"
-          mt="lg"
-          label="カテゴリー"
-          {...form.getInputProps("categoryId")}
-          data={categorySelect}
-          disabled={form.submitting}
-        />
+        <CategorySelect form={form} />
         <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelte} />

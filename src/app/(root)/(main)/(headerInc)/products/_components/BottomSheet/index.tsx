@@ -1,18 +1,19 @@
 "use client";
 
-import { Button, Flex, NativeSelect, Text, TextInput } from "@mantine/core";
+import { Button, Flex, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { Drawer } from "vaul";
 import c from "./index.module.css";
 import { FormEvent, useState } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
-import { useFetch } from "@/app/_hooks/useFetch";
 import { Store } from "@/app/_types/ApiResponse/Store";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { priceScheme } from "@/app/_libs/zod/schema";
 import { ErrorNotification } from "@/app/_libs/notifications/error";
 import { SuccessNotification } from "@/app/_libs/notifications/success";
+import { StoreSelect } from "../StoreSelect";
+import { usePrice } from "@/app/_hooks/usePrice";
 
 type titleProps = {
   title: string;
@@ -25,9 +26,7 @@ export const BottomSheet: React.FC<titleProps> = ({ title, basePath }) => {
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
   const { mutate } = usePrice({ basePath });
 
-  const { data: stores } = useFetch<Store[]>("/api/stores");
-
-  const form = useForm({
+  const form = useForm<{ storeId: string; price: string | number }>({
     mode: "uncontrolled",
     initialValues: {
       storeId: "",
@@ -35,16 +34,6 @@ export const BottomSheet: React.FC<titleProps> = ({ title, basePath }) => {
     },
     validate: zodResolver(priceScheme),
   });
-
-  const storeArr =
-    stores && stores.length > 0
-      ? stores.map((store: StoreSelect) => ({
-          value: store.id,
-          label: store.name,
-        }))
-      : [];
-
-  const storeSelect = [{ value: "", label: "選択してください" }, ...storeArr];
 
   const clickCreate = async (
     _value: typeof form.values,
@@ -96,15 +85,7 @@ export const BottomSheet: React.FC<titleProps> = ({ title, basePath }) => {
             <Title className={c.title}>{title}を追加する</Title>
             <Description />
             {/* ↑aria-describedbyが指定されていないための警告のため */}
-            <NativeSelect
-              size="md"
-              radius="md"
-              label="お店"
-              name="storeId"
-              {...form.getInputProps("storeId")}
-              data={storeSelect}
-              disabled={form.submitting}
-            />
+            <StoreSelect form={form} showChoice />
 
             <TextInput
               size="md"
