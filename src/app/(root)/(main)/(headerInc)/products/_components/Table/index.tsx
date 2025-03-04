@@ -11,19 +11,18 @@ import { IconChevronRight, IconCrown } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import c from "./index.module.css";
-import { Price } from "@/app/_types/ApiResponse/Price";
+import { usePrice } from "@/app/_hooks/usePrice";
 
 type Props = {
-  prices: Price[] | undefined;
-  err: Error;
-  isLoading: boolean;
+  basePath: string;
 };
 
-export const Table: React.FC<Props> = ({ prices, err, isLoading }) => {
+export const Table: React.FC<Props> = ({ basePath }) => {
   const path = usePathname();
+  const { data, error, isLoading } = usePrice({ basePath });
 
-  if (err) {
-    return <div>エラー：{err.message}</div>;
+  if (error) {
+    return <div>エラー：{error.message}</div>;
   }
 
   return (
@@ -39,12 +38,12 @@ export const Table: React.FC<Props> = ({ prices, err, isLoading }) => {
       </Grid>
       <Stack gap={0}>
         {!isLoading ? (
-          prices?.length === 0 ? (
+          data?.length === 0 ? (
             <Text size="md" ta="center">
               まだ登録されていません
             </Text>
           ) : (
-            prices?.map((price, i) => (
+            data?.map((price, i) => (
               <Link
                 href={`${path}/${price.id}`}
                 key={price.id}

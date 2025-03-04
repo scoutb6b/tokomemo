@@ -1,7 +1,6 @@
 "use client";
-import { Box, NativeSelect, TextInput, Title } from "@mantine/core";
+import { Box, TextInput, Title } from "@mantine/core";
 import { AddButton } from "../_components/AddButton";
-import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { FormEvent } from "react";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
@@ -12,24 +11,13 @@ import { zodResolver } from "mantine-form-zod-resolver";
 import { productScheme } from "@/app/_libs/zod/schema";
 import { ErrorNotification } from "@/app/_libs/notifications/error";
 import { SuccessNotification } from "@/app/_libs/notifications/success";
+import { CategorySelect } from "../_components/CategorySelect";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
 const ProductNewPage: NextPage = () => {
   const { token } = useSupabaseSession();
   const router = useRouter();
-
-  const { data: categories } = useFetch<Category[]>("/api/categories");
-
-  const categoryArr =
-    categories && categories.length > 0
-      ? categories.map((category: CategorySelect) => ({
-          value: category.id,
-          label: category.name,
-        }))
-      : [];
-
-  const categorySelect = [{ value: "", label: "カテゴリなし" }, ...categoryArr];
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -83,15 +71,7 @@ const ProductNewPage: NextPage = () => {
             error={form.errors.product}
             disabled={form.submitting}
           />
-          <NativeSelect
-            size="md"
-            radius="md"
-            mt="lg"
-            label="カテゴリー(なしでも登録可能です)"
-            {...form.getInputProps("categoryId")}
-            data={categorySelect}
-            disabled={form.submitting}
-          />
+          <CategorySelect form={form} />
           <AddButton submitting={form.submitting} />
         </form>
       </Box>
