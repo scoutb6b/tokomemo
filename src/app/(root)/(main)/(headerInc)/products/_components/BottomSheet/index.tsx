@@ -17,17 +17,13 @@ import { SuccessNotification } from "@/app/_libs/notifications/success";
 type titleProps = {
   title: string;
   basePath: string;
-  mutate: () => void;
 };
 type StoreSelect = Pick<Store, "id" | "name">;
 
-export const BottomSheet: React.FC<titleProps> = ({
-  title,
-  basePath,
-  mutate,
-}) => {
+export const BottomSheet: React.FC<titleProps> = ({ title, basePath }) => {
   const { token } = useSupabaseSession();
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
+  const { mutate } = usePrice({ basePath });
 
   const { data: stores } = useFetch<Store[]>("/api/stores");
 
