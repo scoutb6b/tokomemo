@@ -7,9 +7,10 @@ type PriceStoreBody = {
   storeId: string;
   productId: string;
   price: number;
+  text: string;
 };
 
-type PriceList = Omit<Price, "updatedAt">;
+type PriceList = Omit<Price, "updatedAt" | "text">;
 
 export const POST = async (
   req: NextRequest,
@@ -37,12 +38,13 @@ export const POST = async (
   }
   try {
     const body = await req.json();
-    const { storeId, price }: PriceStoreBody = body;
+    const { storeId, price, text }: PriceStoreBody = body;
     await prisma.price.create({
       data: {
         storeId,
         productId: id,
         price,
+        text,
       },
     });
     return NextResponse.json({ message: "price成功" });

@@ -24,7 +24,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60%;
+  height: 75%;
   border-radius: 10px 10px 0 0;
 }
 
@@ -39,17 +39,17 @@
   flex-shrink: 0;
   border-radius: 9999px;
   background-color: #d4d4d8;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   cursor: pointer;
 }
 
 .title {
   text-align: center;
-  font-size: 24px;
-  margin-bottom: 24px;
+  font-size: 20px;
+  margin: 0;
 }
 
 .addSubmit {
   display: block;
-  margin: 24px auto 0;
+  margin: 20px auto 0;
 }

@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 type PriceBody = {
   storeId: string;
   price: number;
+  text: string;
 };
 
 export const GET = async (
@@ -49,6 +50,7 @@ export const GET = async (
             name: true,
           },
         },
+        text: true,
         updatedAt: true,
       },
     });
@@ -86,7 +88,7 @@ export const PUT = async (
   }
   try {
     const body = await req.json();
-    const { storeId, price }: PriceBody = body;
+    const { storeId, price, text }: PriceBody = body;
     const updatePrice = await prisma.price.update({
       where: {
         id: priceId,
@@ -97,17 +99,10 @@ export const PUT = async (
       data: {
         storeId,
         price,
+        text,
       },
     });
-    // const updateStore = await prisma.store.update({
-    //   where: {
-    //     id: updatePrice.storeId,
-    //     userId: supabaseUserid,
-    //   },
-    //   data: {
-    //     name: storeId,
-    //   },
-    // });
+
     return NextResponse.json({ price: updatePrice });
   } catch (error) {
     if (error instanceof Error) {

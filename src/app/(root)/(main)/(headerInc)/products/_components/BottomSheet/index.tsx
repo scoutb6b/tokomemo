@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Flex, Text, TextInput } from "@mantine/core";
+import { Button, Flex, Text, Textarea, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { Drawer } from "vaul";
 import c from "./index.module.css";
@@ -14,23 +14,25 @@ import { ErrorNotification } from "@/app/_libs/notifications/error";
 import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { StoreSelect } from "../StoreSelect";
 import { usePrice } from "@/app/_hooks/usePrice";
+import { FormState } from "@/app/_types/ApiResponse/Price";
 
-type titleProps = {
+type TitleProps = {
   title: string;
   basePath: string;
 };
 type StoreSelect = Pick<Store, "id" | "name">;
 
-export const BottomSheet: React.FC<titleProps> = ({ title, basePath }) => {
+export const BottomSheet: React.FC<TitleProps> = ({ title, basePath }) => {
   const { token } = useSupabaseSession();
   const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
   const { mutate } = usePrice({ basePath });
 
-  const form = useForm<{ storeId: string; price: string | number }>({
+  const form = useForm<FormState>({
     mode: "uncontrolled",
     initialValues: {
       storeId: "",
       price: "",
+      memo: "",
     },
     validate: zodResolver(priceScheme),
   });
@@ -45,7 +47,7 @@ export const BottomSheet: React.FC<titleProps> = ({ title, basePath }) => {
       console.error("バリデーションエラー");
       return;
     }
-    const { storeId, price } = form.getValues();
+    const { storeId, price, memo } = form.getValues();
     try {
       await fetch(
         `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/${basePath}/price`,
@@ -55,7 +57,7 @@ export const BottomSheet: React.FC<titleProps> = ({ title, basePath }) => {
             "Content-Type": "application/json",
             Authorization: token,
           },
-          body: JSON.stringify({ storeId, price: Number(price) }),
+          body: JSON.stringify({ storeId, price: Number(price), text: memo }),
         }
       );
       form.reset();
@@ -86,16 +88,25 @@ export const BottomSheet: React.FC<titleProps> = ({ title, basePath }) => {
             <Description />
             {/* ↑aria-describedbyが指定されていないための警告のため */}
             <StoreSelect form={form} showChoice />
-
             <TextInput
               size="md"
               radius="md"
-              mt="lg"
+              mt="md"
               label="価格"
               name="price"
               type="number"
               inputMode="numeric"
               {...form.getInputProps("price")}
+              disabled={form.submitting}
+            />
+            <Textarea
+              size="md"
+              radius="md"
+              mt="md"
+              label="メモ(任意)"
+              placeholder="セール価格で購入"
+              name="memo"
+              {...form.getInputProps("memo")}
               disabled={form.submitting}
             />
             <Button

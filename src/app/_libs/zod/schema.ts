@@ -17,4 +17,5 @@ export const productScheme = z.object({
 export const priceScheme = z.object({
   storeId: z.string().min(1, { message: "お店を選択ください" }),
   price: z.coerce.number().positive({ message: "1円以上で登録してください" }),
+  memo: z.string().max(40, { message: "40文字以内で入力してください" }),
 });
