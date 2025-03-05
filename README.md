@@ -29,5 +29,3 @@ figma
 [https://www.figma.com/design/xcYAvtl8l2cjjAKOwC9sEo/memoWalk?node-id=0-1&t=MNdlarKXLza5H7xS-1](https://www.figma.com/design/xcYAvtl8l2cjjAKOwC9sEo/memoWalk?node-id=0-1&t=MNdlarKXLza5H7xS-1)
 
 ## 今後実装したい機能
-- 価格入力時にメモを残したい
-- 価格入力時の日付を表示
