@@ -8,8 +8,8 @@ import { DeleteNotification } from "@/app/_libs/notifications/delete";
 import { ErrorNotification } from "@/app/_libs/notifications/error";
 import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { priceScheme } from "@/app/_libs/zod/schema";
-import { Price } from "@/app/_types/ApiResponse/Price";
-import { Box, TextInput, Title, Text } from "@mantine/core";
+import { FormState, Price } from "@/app/_types/ApiResponse/Price";
+import { Box, TextInput, Title, Text, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
@@ -27,10 +27,11 @@ const PriceIdPage: NextPage = () => {
     `/api/products/${id}/price/${priceId}`
   );
 
-  const form = useForm<{ storeId: string; price: string | number }>({
+  const form = useForm<FormState>({
     initialValues: {
       storeId: "",
       price: 0,
+      memo: "",
     },
     validate: zodResolver(priceScheme),
   });
@@ -39,6 +40,7 @@ const PriceIdPage: NextPage = () => {
     form.setValues({
       storeId: data[0].store.id,
       price: data[0].price,
+      memo: data[0].text,
     });
     if (data && data.length > 0) {
       setUpdatedDate(new Date(data[0].updatedAt).toISOString().split("T")[0]);
@@ -62,7 +64,7 @@ const PriceIdPage: NextPage = () => {
       console.error("バリデーションエラー");
       return;
     }
-    const { storeId, price } = form.getValues();
+    const { storeId, price, memo } = form.getValues();
     try {
       await fetch(
         `${process.env.NEXT_PUBLIC_APP_BASE_URL}/api/products/${id}/price/${priceId}`,
@@ -72,7 +74,7 @@ const PriceIdPage: NextPage = () => {
             "Content-Type": "application/json",
             Authorization: token,
           },
-          body: JSON.stringify({ storeId, price: Number(price) }),
+          body: JSON.stringify({ storeId, price: Number(price), text: memo }),
         }
       );
       SuccessNotification({});
@@ -98,13 +100,22 @@ const PriceIdPage: NextPage = () => {
         <TextInput
           size="md"
           radius="md"
-          mt="lg"
+          mt="md"
           label="価格"
           type="number"
           inputMode="numeric"
           {...form.getInputProps("price")}
           // value={form.getValues().price ?? null}
           // onChange={(e) => form.setFieldValue("price", e.currentTarget.value)}
+          disabled={form.submitting}
+        />
+        <Textarea
+          size="md"
+          radius="md"
+          mt="md"
+          label="メモ(任意)"
+          name="memo"
+          {...form.getInputProps("memo")}
           disabled={form.submitting}
         />
         <Text size="sm" ta="right" c="gray">

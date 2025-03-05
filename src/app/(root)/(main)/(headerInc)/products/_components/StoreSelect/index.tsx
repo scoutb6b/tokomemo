@@ -1,5 +1,6 @@
 "use client";
 import { useFetch } from "@/app/_hooks/useFetch";
+import { FormState } from "@/app/_types/ApiResponse/Price";
 import { Store } from "@/app/_types/ApiResponse/Store";
 import { NativeSelect } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
@@ -7,13 +8,12 @@ import { UseFormReturnType } from "@mantine/form";
 type StoreSelect = Pick<Store, "id" | "name">;
 
 type Props = {
-  form: UseFormReturnType<{ storeId: string; price: string | number }>;
+  form: UseFormReturnType<FormState>;
   showChoice: boolean;
 };
 
 export const StoreSelect: React.FC<Props> = ({ form, showChoice }) => {
   const { data } = useFetch<Store[]>("/api/stores");
-  console.log(data);
 
   const storeArr =
     data && data.length > 0
