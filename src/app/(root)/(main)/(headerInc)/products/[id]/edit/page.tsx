@@ -1,5 +1,5 @@
 "use client";
-import { Text, Box, TextInput, Title } from "@mantine/core";
+import { Text, TextInput, Title } from "@mantine/core";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { FormEvent, useEffect } from "react";
@@ -17,6 +17,7 @@ import { DeleteNotification } from "@/app/_libs/notifications/delete";
 import { ErrorNotification } from "@/app/_libs/notifications/error";
 import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { CategorySelect } from "../../_components/CategorySelect";
+import { BackButton } from "@/app/_components/BackButton";
 
 type CategorySelect = Pick<Category, "id" | "name">;
 
@@ -93,7 +94,8 @@ const ProductIdEditPage: NextPage = () => {
   }
 
   return (
-    <Box>
+    <>
+      <BackButton path={id as string} />
       <Title size="h2">商品編集</Title>
       <form onSubmit={form.onSubmit(handleEdit)}>
         <TextInput
@@ -107,7 +109,7 @@ const ProductIdEditPage: NextPage = () => {
         <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelte} />
-    </Box>
+    </>
   );
 };
 
