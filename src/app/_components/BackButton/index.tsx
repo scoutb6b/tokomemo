@@ -4,11 +4,15 @@ import { Button } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
-export const BackButton: React.FC = () => {
+type Props = {
+  path: string;
+};
+
+export const BackButton: React.FC<Props> = ({ path }) => {
   const router = useRouter();
   return (
     <Button
-      onClick={() => router.back()}
+      onClick={() => router.push(`/products/${path}`)}
       leftSection={<IconChevronLeft size={20} />}
       variant="white"
       size="xs"

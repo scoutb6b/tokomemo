@@ -9,13 +9,14 @@ import { ErrorNotification } from "@/app/_libs/notifications/error";
 import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { priceScheme } from "@/app/_libs/zod/schema";
 import { FormState, Price } from "@/app/_types/ApiResponse/Price";
-import { Box, TextInput, Title, Text, Textarea } from "@mantine/core";
+import { TextInput, Title, Text, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { StoreSelect } from "../../_components/StoreSelect";
+import { BackButton } from "@/app/_components/BackButton";
 
 const PriceIdPage: NextPage = () => {
   const { id, priceId } = useParams();
@@ -93,7 +94,8 @@ const PriceIdPage: NextPage = () => {
     });
   };
   return (
-    <Box>
+    <>
+      <BackButton path={id as string} />
       <Title size="h2">価格編集</Title>
       <form onSubmit={form.onSubmit(handleSave)}>
         <StoreSelect form={form} showChoice={false} />
@@ -124,7 +126,7 @@ const PriceIdPage: NextPage = () => {
         <EditSave submitting={form.submitting} />
       </form>
       <DeleteAnchor handleDelete={handleDelete} />
-    </Box>
+    </>
   );
 };
 
