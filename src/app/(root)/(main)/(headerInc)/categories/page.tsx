@@ -5,6 +5,7 @@ import { List } from "@/app/_components/LIst";
 import { SkeltonBar } from "@/app/_components/Skelton/Bar";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
+import { PageTransition } from "@/app/_components/PageTransition";
 import { Box, Text, Title } from "@mantine/core";
 import { NextPage } from "next"; //page.tsxにつける型
 
@@ -27,29 +28,31 @@ const CategoryPage: NextPage = () => {
   }
 
   return (
-    <Box>
-      <Title size="h2" mb={20}>
-        {title}
-      </Title>
-      {!isLoading ? (
-        cateogries?.length === 0 ? (
-          <Text size="md" ta="center">
-            まだ登録されていません
-          </Text>
+    <PageTransition>
+      <Box>
+        <Title size="h2" mb={20}>
+          {title}
+        </Title>
+        {!isLoading ? (
+          cateogries?.length === 0 ? (
+            <Text size="md" ta="center">
+              まだ登録されていません
+            </Text>
+          ) : (
+            <Box>
+              {cateogries?.map((category) => {
+                return (
+                  <List key={category.id} item={category} basePath={basePath} />
+                );
+              })}
+            </Box>
+          )
         ) : (
-          <Box>
-            {cateogries?.map((category) => {
-              return (
-                <List key={category.id} item={category} basePath={basePath} />
-              );
-            })}
-          </Box>
-        )
-      ) : (
-        <SkeltonBar />
-      )}
-      <BottomSheet mutate={mutate} title={title} basePath={basePath} />
-    </Box>
+          <SkeltonBar />
+        )}
+        <BottomSheet mutate={mutate} title={title} basePath={basePath} />
+      </Box>
+    </PageTransition>
   );
 };
 
