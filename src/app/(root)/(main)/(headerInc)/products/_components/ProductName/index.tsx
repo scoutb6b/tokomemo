@@ -3,6 +3,7 @@
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Product } from "@/app/_types/ApiResponse/Product";
 import { Flex, Skeleton, Title } from "@mantine/core";
+import { ViewTransition } from "react";
 import { Dots } from "./Dots";
 
 type Props = {
@@ -13,6 +14,8 @@ type ProductName = Pick<Product, "name">;
 
 export const ProductName: React.FC<Props> = ({ path }) => {
   const { data, error, isLoading } = useFetch<ProductName[]>(`/api/${path}`);
+  const productId = path.split("/").filter(Boolean).pop();
+
   if (error) {
     return <div>{error.message}</div>;
   }
@@ -21,7 +24,13 @@ export const ProductName: React.FC<Props> = ({ path }) => {
     <Flex justify="center" align="center" gap="md" pb="xs">
       {!isLoading ? (
         <>
-          <Title size="h2">{data && data[0].name}</Title>
+          <ViewTransition
+            name={productId ? `product-${productId}` : "auto"}
+            share="morph"
+            default="none"
+          >
+            <Title size="h2">{data && data[0].name}</Title>
+          </ViewTransition>
           <Dots />
         </>
       ) : (

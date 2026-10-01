@@ -1,5 +1,8 @@
+"use client";
+
 import { Card, NumberFormatter, Text, Title } from "@mantine/core";
 import Link from "next/link";
+import { ViewTransition } from "react";
 import c from "./index.module.css";
 import { ProductMin } from "@/app/_types/ApiResponse/Product";
 
@@ -9,10 +12,21 @@ type ProductProps = {
 
 export const CardParts: React.FC<ProductProps> = ({ item }) => {
   return (
-    <Card component={Link} href={`products/${item.id}`} className={c.card}>
-      <Title size={20} lineClamp={1} ta="center" fw="medium">
-        {item.name}
-      </Title>
+    <Card
+      component={Link}
+      href={`products/${item.id}`}
+      transitionTypes={["nav-forward"]}
+      className={c.card}
+    >
+      <ViewTransition
+        name={`product-${item.id}`}
+        share="morph"
+        default="none"
+      >
+        <Title size={20} lineClamp={1} ta="center" fw="medium">
+          {item.name}
+        </Title>
+      </ViewTransition>
       <Text fz={30} ta="right" fw="medium">
         {item.price[0] ? (
           <NumberFormatter

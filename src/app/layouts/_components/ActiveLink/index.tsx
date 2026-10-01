@@ -1,6 +1,7 @@
 "use client";
 
-import { Anchor, Stack, Text } from "@mantine/core";
+import { Stack, Text } from "@mantine/core";
+import Link from "next/link";
 import { useActivePath } from "@/app/_hooks/useActivePath";
 import c from "@/app/layouts/footer.module.css";
 import { ReactNode } from "react";
@@ -15,10 +16,11 @@ export const ActiveLink = (item: FooterProps) => {
   const active = useActivePath(item.href);
 
   return (
-    <Anchor
+    <Link
       href={item.href}
-      underline="never"
+      transitionTypes={["nav-forward"]}
       className={active ? c.footerActive : c.footerNonActive}
+      style={{ textDecoration: "none" }}
     >
       <Stack gap="xs" align="center">
         {item.icon}
@@ -26,6 +28,6 @@ export const ActiveLink = (item: FooterProps) => {
           {item.label}
         </Text>
       </Stack>
-    </Anchor>
+    </Link>
   );
 };

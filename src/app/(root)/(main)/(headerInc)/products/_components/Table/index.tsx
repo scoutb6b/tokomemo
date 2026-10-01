@@ -48,6 +48,7 @@ export const Table: React.FC<Props> = ({ basePath }) => {
                 href={`${path}/${price.id}`}
                 key={price.id}
                 className={c.row}
+                transitionTypes={["nav-forward"]}
               >
                 <Grid>
                   <GridCol span={1} className={c.crown}>

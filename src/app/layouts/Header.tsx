@@ -14,9 +14,13 @@ export function Header() {
   };
 
   return (
-    <Flex justify="space-between" className={c.header}>
+    <Flex
+      justify="space-between"
+      className={c.header}
+      style={{ viewTransitionName: "site-header" }}
+    >
       <Box>
-        <Link href="/">
+        <Link href="/" transitionTypes={["nav-back"]}>
           <Image src="/logo.svg" w={200} h={40} alt="logo" />
         </Link>
       </Box>
