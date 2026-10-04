@@ -14,7 +14,7 @@ import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect } from "react";
 import { StoreSelect } from "../../_components/StoreSelect";
 import { BackButton } from "@/app/_components/BackButton";
 
@@ -22,7 +22,6 @@ const PriceIdPage: NextPage = () => {
   const { id, priceId } = useParams();
   const { token } = useSupabaseSession();
   const router = useRouter();
-  const [updatedDate, setUpdatedDate] = useState<string | undefined>("");
 
   const { data, error, isLoading } = useFetch<Price[]>(
     `/api/products/${id}/price/${priceId}`
@@ -37,16 +36,17 @@ const PriceIdPage: NextPage = () => {
     validate: zodResolver(priceScheme),
   });
   useEffect(() => {
-    if (!data) return;
+    if (!data?.length) return;
     form.setValues({
       storeId: data[0].store.id,
       price: data[0].price,
       memo: data[0].text,
     });
-    if (data && data.length > 0) {
-      setUpdatedDate(new Date(data[0].updatedAt).toISOString().split("T")[0]);
-    }
   }, [data]);
+
+  const updatedDate = data?.[0]?.updatedAt
+    ? new Date(data[0].updatedAt).toISOString().split("T")[0]
+    : undefined;
 
   if (error) {
     return <div>{error.message}</div>;
