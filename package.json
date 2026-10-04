@@ -43,5 +43,11 @@
     "postcss-simple-vars": "^7.0.1",
     "prisma": "^5.21.1",
     "typescript": "^5"
+  },
+  "overrides": {
+    "react-simple-pull-to-refresh": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
   }
 }
