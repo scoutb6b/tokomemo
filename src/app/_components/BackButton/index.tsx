@@ -12,11 +12,7 @@ export const BackButton: React.FC<Props> = ({ path }) => {
   const router = useRouter();
   return (
     <Button
-      onClick={() =>
-        router.push(`/products/${path}`, {
-          transitionTypes: ["nav-back"],
-        })
-      }
+      onClick={() => router.push(`/products/${path}`)}
       leftSection={<IconChevronLeft size={20} />}
       variant="white"
       size="xs"
