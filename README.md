@@ -7,13 +7,13 @@ npm run dev
 
 ## フロントエンド
 - 言語：TypeScript
-- フレームワーク：Next.js 16
+- フレームワーク：Next,js 15
 - スタイル：Mantine,css Module
 - データfetch：SWR
 
 ## バックエンド
 - 言語：TypeScript
-- フレームワーク：Next.js 16(API Route)
+- フレームワーク：Next.js 15(API Route)
 - DB：supabase(postgreSQL)
 - ORM：Prisma
 - 認証：Supabase Auth

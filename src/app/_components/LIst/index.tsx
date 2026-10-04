@@ -1,9 +1,6 @@
-"use client";
-
 import { Flex, Paper, Text } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import Link from "next/link";
-import { ViewTransition } from "react";
 import c from "./index.module.css";
 import { Store } from "@/app/_types/ApiResponse/Store";
 
@@ -14,20 +11,9 @@ type itemProps = {
 
 export const List: React.FC<itemProps> = ({ item, basePath }) => {
   return (
-    <Paper
-      component={Link}
-      href={`/${basePath}/${item.id}`}
-      transitionTypes={["nav-forward"]}
-      className={c.list}
-    >
+    <Paper component={Link} href={`/${basePath}/${item.id}`} className={c.list}>
       <Flex justify="space-between" align="center">
-        <ViewTransition
-          name={`${basePath}-${item.id}`}
-          share="morph"
-          default="none"
-        >
-          <Text fz="xl">{item.name}</Text>
-        </ViewTransition>
+        <Text fz="xl">{item.name}</Text>
         <IconEdit size={24} />
       </Flex>
     </Paper>

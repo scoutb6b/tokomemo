@@ -10,13 +10,12 @@ import { ErrorNotification } from "@/app/_libs/notifications/error";
 import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { nameScheme } from "@/app/_libs/zod/schema";
 import { Store } from "@/app/_types/ApiResponse/Store";
-import { PageTransition } from "@/app/_components/PageTransition";
 import { Box, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { FormEvent, useEffect, ViewTransition } from "react";
+import { FormEvent, useEffect } from "react";
 
 const StoreIdPage: NextPage = () => {
   const { id } = useParams();
@@ -64,7 +63,7 @@ const StoreIdPage: NextPage = () => {
         },
         body: JSON.stringify(storeName),
       });
-      router.push("/stores", { transitionTypes: ["nav-back"] });
+      router.push("/stores");
       SuccessNotification({});
     } catch (error) {
       ErrorNotification({ error });
@@ -76,8 +75,7 @@ const StoreIdPage: NextPage = () => {
     DeleteNotification({
       endPoint: `api/stores/${id}`,
       token,
-      onSuccessPush: () =>
-        router.push("/stores", { transitionTypes: ["nav-back"] }),
+      onSuccessPush: () => router.push("/stores"),
     });
   };
 
@@ -88,33 +86,23 @@ const StoreIdPage: NextPage = () => {
     return <SkeltonBar />;
   }
 
-  const storeId = Array.isArray(id) ? id[0] : id;
-
   return (
-    <PageTransition>
-      <Box w="94%" mx="auto">
-        <Title size="h2">お店編集</Title>
-        <form onSubmit={form.onSubmit(handleSave)}>
-          <ViewTransition
-            name={storeId ? `stores-${storeId}` : "auto"}
-            share="morph"
-            default="none"
-          >
-            <TextInput
-              size="md"
-              radius="md"
-              label="お店"
-              name="name"
-              {...form.getInputProps("name")}
-              disabled={form.submitting}
-            />
-          </ViewTransition>
+    <Box w="94%" mx="auto">
+      <Title size="h2">お店編集</Title>
+      <form onSubmit={form.onSubmit(handleSave)}>
+        <TextInput
+          size="md"
+          radius="md"
+          label="お店"
+          name="name"
+          {...form.getInputProps("name")}
+          disabled={form.submitting}
+        />
 
-          <EditSave submitting={form.submitting} />
-        </form>
-        <DeleteAnchor handleDelete={handleDelete} />
-      </Box>
-    </PageTransition>
+        <EditSave submitting={form.submitting} />
+      </form>
+      <DeleteAnchor handleDelete={handleDelete} />
+    </Box>
   );
 };
 

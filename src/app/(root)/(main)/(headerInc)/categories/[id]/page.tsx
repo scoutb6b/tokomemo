@@ -10,13 +10,12 @@ import { ErrorNotification } from "@/app/_libs/notifications/error";
 import { SuccessNotification } from "@/app/_libs/notifications/success";
 import { nameScheme } from "@/app/_libs/zod/schema";
 import { Category } from "@/app/_types/ApiResponse/Category";
-import { PageTransition } from "@/app/_components/PageTransition";
 import { Box, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { FormEvent, useEffect, ViewTransition } from "react";
+import { FormEvent, useEffect } from "react";
 
 const CategoryIdPage: NextPage = () => {
   const { id } = useParams();
@@ -71,7 +70,7 @@ const CategoryIdPage: NextPage = () => {
         }
       );
       SuccessNotification({});
-      router.push("/categories", { transitionTypes: ["nav-back"] });
+      router.push("/categories");
     } catch (error) {
       ErrorNotification({ error });
     }
@@ -82,8 +81,7 @@ const CategoryIdPage: NextPage = () => {
     DeleteNotification({
       endPoint: `api/categories/${id}`,
       token,
-      onSuccessPush: () =>
-        router.push("/categories", { transitionTypes: ["nav-back"] }),
+      onSuccessPush: () => router.push("/categories"),
     });
   };
 
@@ -94,33 +92,23 @@ const CategoryIdPage: NextPage = () => {
     return <SkeltonBar />;
   }
 
-  const categoryId = Array.isArray(id) ? id[0] : id;
-
   return (
-    <PageTransition>
-      <Box w="94%" mx="auto">
-        <Title size="h2">カテゴリー編集</Title>
-        <form onSubmit={form.onSubmit(handleSave)}>
-          <ViewTransition
-            name={categoryId ? `categories-${categoryId}` : "auto"}
-            share="morph"
-            default="none"
-          >
-            <TextInput
-              size="md"
-              radius="md"
-              label="カテゴリー"
-              name="name"
-              {...form.getInputProps("name")}
-              disabled={form.submitting}
-            />
-          </ViewTransition>
+    <Box w="94%" mx="auto">
+      <Title size="h2">カテゴリー編集</Title>
+      <form onSubmit={form.onSubmit(handleSave)}>
+        <TextInput
+          size="md"
+          radius="md"
+          label="カテゴリー"
+          name="name"
+          {...form.getInputProps("name")}
+          disabled={form.submitting}
+        />
 
-          <EditSave submitting={form.submitting} />
-        </form>
-        <DeleteAnchor handleDelete={handleDelete} />
-      </Box>
-    </PageTransition>
+        <EditSave submitting={form.submitting} />
+      </form>
+      <DeleteAnchor handleDelete={handleDelete} />
+    </Box>
   );
 };
 
