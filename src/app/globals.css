@@ -24,3 +24,10 @@ main {
   max-width: 100%;
   margin: 0 auto;
 }
+
+::view-transition-group(.morph),
+::view-transition-old(.morph),
+::view-transition-new(.morph) {
+  animation-duration: 600ms;
+  animation-timing-function: ease-out;
+}
