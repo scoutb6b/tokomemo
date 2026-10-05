@@ -5,12 +5,15 @@ import Link from "next/link";
 import { ViewTransition } from "react";
 import c from "./index.module.css";
 import { ProductMin } from "@/app/_types/ApiResponse/Product";
+import { rememberProductName } from "../productNames";
 
 type ProductProps = {
   item: Omit<ProductMin, "category">;
 };
 
 export const CardParts: React.FC<ProductProps> = ({ item }) => {
+  rememberProductName(item.id, item.name);
+
   return (
     <Card component={Link} href={`products/${item.id}`} className={c.card}>
       <ViewTransition
