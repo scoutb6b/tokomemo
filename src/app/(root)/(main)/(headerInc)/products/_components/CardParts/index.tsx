@@ -21,25 +21,27 @@ export const CardParts: React.FC<ProductProps> = ({ item }) => {
         share="morph"
         default="none"
       >
+        <span className={c.frame} aria-hidden="true" />
+      </ViewTransition>
+      <div className={c.body}>
         <Title size={20} lineClamp={1} ta="center" fw="medium">
           {item.name}
         </Title>
-      </ViewTransition>
-      <Text fz={30} ta="right" fw="medium">
-        {item.price[0] ? (
-          <NumberFormatter
-            prefix="¥"
-            value={item.price[0].price}
-            thousandSeparator
-          />
-        ) : (
-          "--"
-        )}
-      </Text>
-
-      <Text fz="sm" ta="right">
-        {item.price[0]?.store.name ?? "--"}
-      </Text>
+        <Text fz={30} ta="right" fw="medium">
+          {item.price[0] ? (
+            <NumberFormatter
+              prefix="¥"
+              value={item.price[0].price}
+              thousandSeparator
+            />
+          ) : (
+            "--"
+          )}
+        </Text>
+        <Text fz="sm" ta="right">
+          {item.price[0]?.store.name ?? "--"}
+        </Text>
+      </div>
     </Card>
   );
 };
