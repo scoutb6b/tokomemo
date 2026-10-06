@@ -31,6 +31,12 @@ async function load(path: string) {
   return res.json();
 }
 
+export function invalidateSuspenseFetch(path: string) {
+  const key = `${process.env.NEXT_PUBLIC_APP_BASE_URL}${path}`;
+  resolved.delete(key);
+  pending.delete(key);
+}
+
 export function useSuspenseFetch<T>(path: string): T {
   if (typeof window === "undefined") {
     throw new Error("useSuspenseFetch はブラウザでのみ使えます");
