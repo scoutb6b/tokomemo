@@ -31,7 +31,7 @@ const theme = createTheme({
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ja">
+    <html lang="ja" suppressHydrationWarning>
       <head>
         <ColorSchemeScript />
       </head>

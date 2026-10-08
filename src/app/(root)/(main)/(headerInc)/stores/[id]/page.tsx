@@ -27,6 +27,7 @@ const StoreIdPage: NextPage = () => {
     error,
     isLoading,
   } = useFetch<Store>(`/api/stores/${id}`);
+  const { mutate: mutateStores } = useFetch<Store[]>("/api/stores");
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -63,6 +64,7 @@ const StoreIdPage: NextPage = () => {
         },
         body: JSON.stringify(storeName),
       });
+      await mutateStores();
       router.push("/stores");
       SuccessNotification({});
     } catch (error) {
@@ -75,7 +77,10 @@ const StoreIdPage: NextPage = () => {
     DeleteNotification({
       endPoint: `api/stores/${id}`,
       token,
-      onSuccessPush: () => router.push("/stores"),
+      onSuccessPush: async () => {
+        await mutateStores();
+        router.push("/stores");
+      },
     });
   };
 

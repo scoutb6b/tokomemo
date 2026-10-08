@@ -3,6 +3,7 @@ import { DeleteAnchor } from "@/app/_components/DeleteAnchor";
 import { EditSave } from "@/app/_components/EditSave";
 import { SkeltonBar } from "@/app/_components/Skelton/Bar";
 import { useFetch } from "@/app/_hooks/useFetch";
+import { usePrice } from "@/app/_hooks/usePrice";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { DeleteNotification } from "@/app/_libs/notifications/delete";
 import { ErrorNotification } from "@/app/_libs/notifications/error";
@@ -26,6 +27,9 @@ const PriceIdPage: NextPage = () => {
   const { data, error, isLoading } = useFetch<Price[]>(
     `/api/products/${id}/price/${priceId}`
   );
+  const { mutate: mutatePrices } = usePrice({
+    basePath: `/products/${id}`,
+  });
 
   const form = useForm<FormState>({
     initialValues: {
@@ -79,6 +83,7 @@ const PriceIdPage: NextPage = () => {
         }
       );
       SuccessNotification({});
+      await mutatePrices();
       router.push(`/products/${id}`);
     } catch (error) {
       ErrorNotification({ error });
@@ -90,7 +95,10 @@ const PriceIdPage: NextPage = () => {
     DeleteNotification({
       endPoint: `api/products/${id}/price/${priceId}`,
       token,
-      onSuccessPush: () => router.push(`/products/${id}`),
+      onSuccessPush: async () => {
+        await mutatePrices();
+        router.push(`/products/${id}`);
+      },
     });
   };
   return (
