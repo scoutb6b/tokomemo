@@ -27,6 +27,7 @@ const CategoryIdPage: NextPage = () => {
     error,
     isLoading,
   } = useFetch<Category>(`/api/categories/${id}`);
+  const { mutate: mutateCategories } = useFetch<Category[]>("/api/categories");
 
   const form = useForm({
     mode: "uncontrolled",
@@ -70,6 +71,7 @@ const CategoryIdPage: NextPage = () => {
         }
       );
       SuccessNotification({});
+      await mutateCategories();
       router.push("/categories");
     } catch (error) {
       ErrorNotification({ error });
@@ -81,7 +83,10 @@ const CategoryIdPage: NextPage = () => {
     DeleteNotification({
       endPoint: `api/categories/${id}`,
       token,
-      onSuccessPush: () => router.push("/categories"),
+      onSuccessPush: async () => {
+        await mutateCategories();
+        router.push("/categories");
+      },
     });
   };
 

@@ -4,15 +4,12 @@ import { Card, NumberFormatter, Text, Title } from "@mantine/core";
 import Link from "next/link";
 import c from "./index.module.css";
 import { ProductMin } from "@/app/_types/ApiResponse/Product";
-import { rememberProductName } from "../productNames";
 
 type ProductProps = {
   item: Omit<ProductMin, "category">;
 };
 
 export const CardParts: React.FC<ProductProps> = ({ item }) => {
-  rememberProductName(item.id, item.name);
-
   return (
     <Card component={Link} href={`products/${item.id}`} className={c.card}>
       <Title size={20} lineClamp={1} ta="center" fw="medium">

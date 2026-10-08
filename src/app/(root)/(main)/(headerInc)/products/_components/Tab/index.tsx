@@ -1,44 +1,35 @@
 "use client";
 import { SimpleGrid, Tabs, Text } from "@mantine/core";
-import { ViewTransition } from "react";
+import { Suspense, ViewTransition } from "react";
 import { useFetch } from "@/app/_hooks/useFetch";
-import { useSuspenseFetch } from "@/app/_hooks/useSuspenseFetch";
 import { ProductMin } from "@/app/_types/ApiResponse/Product";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { CardParts } from "../CardParts";
 import c from "./index.module.css";
 import { SkeletonGrid } from "@/app/_components/Skelton/Grid";
-import { FetchBoundary, Reveal } from "../FetchBoundary";
-
-const productListName = "product-list";
-
-function ProductListFallback() {
-  return (
-    <ViewTransition name={productListName} share="morph" default="none">
-      <SimpleGrid cols={2} w={375} px={18}>
-        <SkeletonGrid />
-      </SimpleGrid>
-    </ViewTransition>
-  );
-}
 
 function ProductPanels({ categories }: { categories?: Category[] }) {
-  const products = useSuspenseFetch<ProductMin[]>("/api/products");
+  const { data: products, error } = useFetch<ProductMin[]>("/api/products", {
+    suspense: true,
+  });
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+  if (!products) return null;
 
   return (
     <>
       <Tabs.Panel value="all">
-        <ViewTransition name={productListName} share="morph" default="none">
-          <SimpleGrid cols={2} w={375} px={18}>
-            {products.length > 0 ? (
-              products.map((product) => (
-                <CardParts key={product.id} item={product} />
-              ))
-            ) : (
-              <Text size="md">まだ商品がありません</Text>
-            )}
-          </SimpleGrid>
-        </ViewTransition>
+        <SimpleGrid cols={2} w={375} px={18}>
+          {products.length > 0 ? (
+            products.map((product) => (
+              <CardParts key={product.id} item={product} />
+            ))
+          ) : (
+            <Text size="md">まだ商品がありません</Text>
+          )}
+        </SimpleGrid>
       </Tabs.Panel>
       {categories?.map((category) => (
         <Tabs.Panel value={category.id} key={category.id}>
@@ -81,11 +72,17 @@ export const Tab: React.FC = () => {
         })}
       </Tabs.List>
 
-      <FetchBoundary>
-        <Reveal fallback={<ProductListFallback />}>
+      <ViewTransition>
+        <Suspense
+          fallback={
+            <SimpleGrid cols={2} w={375} px={18}>
+              <SkeletonGrid />
+            </SimpleGrid>
+          }
+        >
           <ProductPanels categories={categories} />
-        </Reveal>
-      </FetchBoundary>
+        </Suspense>
+      </ViewTransition>
     </Tabs>
   );
 };
