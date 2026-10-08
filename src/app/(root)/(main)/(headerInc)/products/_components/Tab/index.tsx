@@ -6,6 +6,7 @@ import { ProductMin } from "@/app/_types/ApiResponse/Product";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { CardParts } from "../CardParts";
 import c from "./index.module.css";
+import { FetchRecover } from "@/app/_components/FetchRecover";
 import { SkeletonGrid } from "@/app/_components/Skelton/Grid";
 
 function ProductPanels({ categories }: { categories?: Category[] }) {
@@ -80,7 +81,9 @@ export const Tab: React.FC = () => {
             </SimpleGrid>
           }
         >
-          <ProductPanels categories={categories} />
+          <FetchRecover>
+            <ProductPanels categories={categories} />
+          </FetchRecover>
         </Suspense>
       </ViewTransition>
     </Tabs>

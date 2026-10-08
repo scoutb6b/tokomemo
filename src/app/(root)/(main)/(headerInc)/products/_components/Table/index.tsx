@@ -12,6 +12,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, ViewTransition } from "react";
 import c from "./index.module.css";
+import { FetchRecover } from "@/app/_components/FetchRecover";
 import { usePrice } from "@/app/_hooks/usePrice";
 
 type Props = {
@@ -73,7 +74,9 @@ export const Table: React.FC<Props> = ({ basePath }) => {
       </Grid>
       <ViewTransition>
         <Suspense fallback={<Skeleton />}>
-          <PriceRows basePath={basePath} />
+          <FetchRecover>
+            <PriceRows basePath={basePath} />
+          </FetchRecover>
         </Suspense>
       </ViewTransition>
     </>

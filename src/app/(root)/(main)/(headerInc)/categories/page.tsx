@@ -3,6 +3,7 @@
 import { BottomSheet } from "@/app/_components/BottomSheet";
 import { List } from "@/app/_components/LIst";
 import { SkeltonBar } from "@/app/_components/Skelton/Bar";
+import { FetchRecover } from "@/app/_components/FetchRecover";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { Category } from "@/app/_types/ApiResponse/Category";
 import { Box, Text, Title } from "@mantine/core";
@@ -56,7 +57,9 @@ const CategoryPage: NextPage = () => {
       </Title>
       <ViewTransition>
         <Suspense fallback={<SkeltonBar />}>
-          <CategoryList />
+          <FetchRecover>
+            <CategoryList />
+          </FetchRecover>
         </Suspense>
       </ViewTransition>
       <BottomSheet mutate={mutate} title={title} basePath={basePath} />

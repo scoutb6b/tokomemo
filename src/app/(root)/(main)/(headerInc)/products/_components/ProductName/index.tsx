@@ -4,6 +4,7 @@ import { useFetch } from "@/app/_hooks/useFetch";
 import { Product } from "@/app/_types/ApiResponse/Product";
 import { Flex, Skeleton, Title } from "@mantine/core";
 import { Suspense, ViewTransition } from "react";
+import { FetchRecover } from "@/app/_components/FetchRecover";
 import { Dots } from "./Dots";
 
 type Props = {
@@ -45,7 +46,9 @@ export const ProductName: React.FC<Props> = ({ path }) => {
   return (
     <ViewTransition>
       <Suspense fallback={<NameSkeleton />}>
-        <SuspendedName path={path} />
+        <FetchRecover>
+          <SuspendedName path={path} />
+        </FetchRecover>
       </Suspense>
     </ViewTransition>
   );
