@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, NumberFormatter, Text, Title } from "@mantine/core";
 import Link from "next/link";
 import c from "./index.module.css";
@@ -24,7 +26,6 @@ export const CardParts: React.FC<ProductProps> = ({ item }) => {
           "--"
         )}
       </Text>
-
       <Text fz="sm" ta="right">
         {item.price[0]?.store.name ?? "--"}
       </Text>
